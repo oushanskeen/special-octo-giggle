@@ -19,6 +19,14 @@ const CandlesBar = ({data, mapping}) => {
   const [buyValue, setBuyValue] = useState(0);
   const [sellValue, setSellValue] = useState(0);
 
+  // gain+loss
+  const [gainLoss, setGainLoss] = useState(0);
+  const [previousPrice,setPreviousPrice] = useState(0);
+
+  useEffect(() => {
+    setGainLoss((stackAmount * tokenPrice) - (stackAmount * previousPrice));
+  },[tokenPrice]);
+
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -78,6 +86,7 @@ const confirmBuy = () => {
   }
   setStackAmount(stackAmount + tempStackAmount);
   setStackValue(stackValue + tempStackValue);
+  setPreviousPrice(tokenPrice);
 
   setTempBalance(0);
   setBuyValue(0);
@@ -86,15 +95,33 @@ const confirmBuy = () => {
 
 };
 const inputSell = (e) => {
+  setSellValue(+e.target.value);
   setTempBalance(tempBalance + +e.target.value*tokenPrice);
-  setTempStackAmount(tempStackAmount - +e.target.value);
-  setTempStackValue(tempStackAmount - +e.target.value*tokenPrice);
+  // setTempStackAmount(tempStackAmount - +e.target.value);
+  // setTempStackValue(tempStackAmount - +e.target.value*tokenPrice);
 };
+useEffect(() => {
+  setTempStackAmount(stackAmount - sellValue);
+  setTempStackValue(stackValue - sellValue*tokenPrice);
+  setTempBalance(balance + sellValue*tokenPrice);
+},[sellValue]);
+useEffect(() => {
+  if(stackAmount == 0){
+    setStackValue(0);
+  }
+},[stackAmount]);
+
 const confirmSell = () => {
-  // setBalance(tempBalance)
-  // setStackAmount(tempStackAmount)
-  // setStackValue(tempStackValue)
-  // setSellValue("")
+  setBalance(tempBalance)
+  setStackAmount(tempStackAmount)
+  setStackValue(tempStackValue)
+
+  setSellValue(0)
+  setTempStackAmount(0);
+  setTempStackValue(0);
+  setTempBalance(0);
+  setGainLoss(0);
+  setPreviousPrice(0);
 };
 
 //-------------------------------------------------------------
@@ -124,9 +151,10 @@ const confirmSell = () => {
 
 
   const sendRequest = async () => {
-      if(!gameStarted){
-        setGameStarted(true);
-      }
+      // if(!gameStarted){
+      //   setGameStarted(true);
+      // }
+      !gameStarted && setGameStarted(true);
       setStartDate(startDate + 3600*1000);
       setEndDate((endDate + 3600*1000));
       const request = `https://api-stage.dex.guru/v1/tradingview/history?symbol=0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2-eth_USD&resolution=10&from=${setDateToSec(startDate)}&to=${setDateToSec(endDate)}`;
@@ -143,6 +171,7 @@ const confirmSell = () => {
                   setError(error);
               }
           )
+
   }
 
   const [dataset, setDataset] = useState({});
@@ -189,16 +218,11 @@ const confirmSell = () => {
   const weekdays = (start, stop) => {
       console.log("START: ", start);
       console.log("STOP: ", stop);
-      // console.log("d3.utcDays(start, stop): ", d3.getUTCHours(start, stop));
       console.log("d3.utcDays(start, stop): ", d3.utcMinute.range(start, stop));
-      // utcHour
-      // return d3.utcDays(start, stop).filter(d => d.getUTCDay() !== 0 && d.getUTCDay() !== 6)
-      // return d3.utcDays(start, stop).filter(d => d.getUTCDay() !== 0 && d.getUTCDay() !== 6)
       return d3.utcMinute.range(start, stop);
     };
 
   console.log("weekdays: ", weekdays);
-  // console.log("weekdays(d3.min(X), d3.max(X)): ",weekdays(d3.min(X), d3.max(X)));
 
   // Compute default domains and ticks.
   if (xDomain === undefined) xDomain = weekdays(d3.min(X), d3.max(X));
@@ -259,31 +283,34 @@ const confirmSell = () => {
     .attr("text-anchor", "start")
     .text(yLabel));
 
-const g = svgElement.append("g")
-.attr("stroke", stroke)
-.attr("stroke-linecap", strokeLinecap)
-.selectAll("g")
-.data(I)
-.join("g")
-.attr("transform", i => `translate(${xScale(X[i])},0)`);
+    const g =
+      svgElement
+        .append("g")
+        .attr("stroke", stroke)
+        .attr("stroke-linecap", strokeLinecap)
+        .selectAll("g")
+        .data(I)
+        .join("g")
+        .attr("transform", i => `translate(${xScale(X[i])},0)`);
 
-g.append("line")
-.attr("y1", i => yScale(Yl[i]))
-.attr("y2", i => yScale(Yh[i]));
+      g
+        .append("line")
+        .attr("y1", i => yScale(Yl[i]))
+        .attr("y2", i => yScale(Yh[i]));
 
-g.append("line")
-.attr("y1", i => yScale(Yo[i]))
-.attr("y2", i => yScale(Yc[i]))
-// .attr("stroke-width", xScale.bandwidth())
-.attr("stroke-width", 4)
-.attr("stroke", i => colors[1 + Math.sign(Yo[i] - Yc[i])]);
+      g
+        .append("line")
+        .attr("y1", i => yScale(Yo[i]))
+        .attr("y2", i => yScale(Yc[i]))
+    // .attr("stroke-width", xScale.bandwidth())
+        .attr("stroke-width", 4)
+        .attr("stroke", i => colors[1 + Math.sign(Yo[i] - Yc[i])]);
 
-if (title) g.append("title")
-.text(title);
-
-  // }, [dataset]);
-
-  }, [chartData]);
+    if (title) g
+      .append("title")
+      .text(title);
+  }, [chartData]
+);
 
   return (
     <>
@@ -297,34 +324,43 @@ if (title) g.append("title")
         }}
       />
       <div>
-        <p style={{color: "red", border: '2px solid white', width: '100px', whiteSpace: 'break-word'}}>
-          {//items
-          }
-        </p>
-        <div style={{display:"flex"}}>
-          <button onClick={confirmBuy}>buy</button>
-          <input onChange={event => inputBuy(event)} value={buyValue}/>
-          <button onClick={setSell}>sell</button>
-          <input onChange={event => inputSell(event)} value={sellValue}/>
-          <button onClick={sendRequest}>{gameStarted ? "next" : "start"}</button>
-        </div>
-        <div>
-          <div style={{display:"flex"}}>
-            <p>current balance: {balance}</p>
-            <p style={{color: "lightGrey"}}>new balance: {tempBalance}</p>
-          </div>
-          <div style={{display:"flex"}}>
-            <p>stack amount: {stackAmount}</p>
-            <p style={{color: "lightGrey"}}>new stack amount: {tempStackAmount}</p>
-          </div>
-          <div style={{display:"flex"}}>
-            <p>stack value: {stackValue}</p>
-            <p style={{color: "lightGrey"}}>new stack value: {tempStackValue}</p>
-          </div>
-          <div style={{display:"flex"}}>
-            <p>current token price: {tokenPrice}</p>
-          </div>
-        </div>
+        {
+          gameStarted
+          ?
+          <>
+            <p style={{color: "red", border: '2px solid white', width: '100px', whiteSpace: 'break-word'}}>
+              {//items
+              }
+            </p>
+            <div style={{display:"flex"}}>
+              <button onClick={confirmBuy}>buy</button>
+              <input onChange={event => inputBuy(event)} value={buyValue}/>
+              <button onClick={confirmSell}>sell</button>
+              <input onChange={event => inputSell(event)} value={sellValue}/>
+            </div>
+            <div>
+              <div style={{display:"flex"}}>
+                <p>current balance: {balance}</p>
+                <p style={{color: "lightGrey"}}>new balance: {tempBalance}</p>
+              </div>
+              <div style={{display:"flex"}}>
+                <p>stack amount: {stackAmount}</p>
+                <p style={{color: "lightGrey"}}>new stack amount: {tempStackAmount}</p>
+              </div>
+              <div style={{display:"flex"}}>
+                <p>stack value: {stackValue}</p>
+                <p style={{color: "lightGrey"}}>new stack value: {tempStackValue}</p>
+              </div>
+              <div style={{display:"flex"}}>
+                <p>current token price: {tokenPrice}</p>
+                <p>gain/loss:{gainLoss}</p>
+                <p> prev price: {previousPrice}</p>
+              </div>
+            </div>
+          </>
+          : ""
+        }
+        <button onClick={sendRequest}>{gameStarted ? "next" : "start"}</button>
       </div>
     </>);
 }

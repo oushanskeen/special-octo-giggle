@@ -5,6 +5,98 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #202020;
+}
+
+tr {
+  color: "red";
+}
+
+td, th {
+  /* display: block; */
+  width: 16.6%;
+  padding: 5px;
+  /* border: 2px solid white; */
+  margin: 0px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  /* text-overflow: ellipsis "[..]"; */
+  text-decoration: none;
+    /* text-overflow: ellipsis; */
+    /* overflow: hidden; */
+    /* white-space: nowrap; */
+    /* width: 80px; */
+    /* height: 32px; */
+}
+
+td{
+  font-size: 12px;
+}
+
+.btn {
+    padding: 1%;
+    /* text-align: center; */
+    width: 100px;
+    background: grey;
+    display: block;
+    color: #202020;
+    /* border: auto; */
+    margin: auto;
+    /* margin-left: auto; */
+    /* margin-right: auto; */
+}
+
+.caption{
+  margin: auto;
+}
+
+.smlbtn {
+    /* padding: 10px;
+    text-align: center;*/
+    width: 50px;
+    background: grey;
+    /* display: block;
+    margin-left: auto;
+    margin-right: auto; */
+}
+
+table{
+  width: 100%;
+  padding: 0px;
+}
+.table{
+  padding: 20px;
+  margin: 20px;
+  /* border: 2px solid white; */
+}
+.module{
+  margin: 2px;
+  padding: 2px;
+  border:2px solid green;
+  background-color: #202020;
+  color: #909090;
+}
+.dev_module{
+  margin: 2px;
+  padding: 10px;
+  border:2px solid grey;
+  background-color: #202020;
+  color: #909090;
+  text-align: left;
+}
+.component{
+  border:2px solid green;
+}
+.bullet{
+  padding-left: 8px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis "[..]";
+}
+
+.box{
+  display:flex;
 }
 
 code {
@@ -17,3 +109,44 @@ p {
   padding-top: 1px;
   margin-bottom: 1px;
 }
+
+.slidecontainer {
+  width: 100%;
+}
+
+.slider {
+  -webkit-appearance: none;
+  cursor: move;
+  width: 80%;
+  height: 10px;
+  background: #404040;
+  /* color: #404040; */
+  /* background-color: #404040; */
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+.sliderbox{
+  width:20%;
+}
+/* .slider:hover {
+  opacity: 10;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  background: #505050;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background: #04AA6D;
+  cursor: pointer;
+} */

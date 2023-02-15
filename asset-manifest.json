@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/special-octo-giggle/static/css/main.645ed84c.css",
+    "main.css": "/special-octo-giggle/static/css/main.8090bf38.css",
     "main.js": "/special-octo-giggle/static/js/main.0b906df8.js",
     "index.html": "/special-octo-giggle/index.html",
-    "main.645ed84c.css.map": "/special-octo-giggle/static/css/main.645ed84c.css.map",
+    "main.8090bf38.css.map": "/special-octo-giggle/static/css/main.8090bf38.css.map",
     "main.0b906df8.js.map": "/special-octo-giggle/static/js/main.0b906df8.js.map"
   },
   "entrypoints": [
-    "static/css/main.645ed84c.css",
+    "static/css/main.8090bf38.css",
     "static/js/main.0b906df8.js"
   ]
 }

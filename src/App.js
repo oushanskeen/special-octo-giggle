@@ -22,13 +22,10 @@ const mapping = {
 function App() {
   return (<>
   {
-//     // <div className="App">
-//     // <MsgProtocol/>
     <PerspectiveTokens/>
-//     // <Rigid/>
+   // <Rigid/>
 
-//     // </div>
   }</>)
 }
-// );
+
 export default App;

@@ -1,5 +1,6 @@
 # Trading game playground
 Current version stores development branches on different pages available via links in the header.
+[Try me](https://oushanskeen.github.io/special-octo-giggle/)
 
 ----------------------------------------------------------------
 

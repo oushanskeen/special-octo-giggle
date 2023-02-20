@@ -21,8 +21,6 @@ const PerspectiveTokens = () => {
 
               SET_STATE({...STATE, setStrategy:payload});
 
-              // console.log("M: GET_PERSPECTIVE_TOKENS WITH STRATEGY: ", payload);
-
               let request =
                   "https://api-stage-lax.dexguru.biz/v1/deals/find?interval="
                   + payload.interval
@@ -85,10 +83,10 @@ const PerspectiveTokens = () => {
       },[intervalValue,chainId,gainsThreshold,trendingInterval]);
 
     return (
-      <>
-        <div>
-          {
-          <div class="module box">
+        <>
+            <div>
+              {
+             <div class="module box">
           <div class="module sliderbox">
             <div id="intervalRangeValue">interval: {frameOptions[intervalValue]}</div>
             <input id="intervalRange" type="range" min="0" max={frameOptions.length - 1} value={intervalValue} onChange={(e) => setIntervalValue(e.target.value)} class="slider" step="1"/>
@@ -98,13 +96,13 @@ const PerspectiveTokens = () => {
              <div id="chainRangeValue">chain: {chains[chainId]}</div>
              <input type="range" min="0" max={chains.length - 1} value={chainId} onChange={(e) => setChainId(e.target.value)} class="slider" id="chainRange" step="1"/>
            </div>
+
            <div class="module sliderbox">
              <div id="gainsThresholdRangeValue">gains threshold: {gainsThreshold}</div>
              <input type="range" min="0.01" max="1" value={gainsThreshold} onChange={(e) => setGainsThreshold(e.target.value)} class="slider" id="gainsThresholdRange" step="0.01"/>
-
            </div>
            <div class="module sliderbox">
-             <div id="trendingIntervalRangeValue">trendinginterval: {frameOptions[trendingInterval]}</div>
+             <div id="trendingIntervalRangeValue">trending interval: {frameOptions[trendingInterval]}</div>
              <input type="range" min="0" max={frameOptions.length - 1} value={trendingInterval} onChange={(e) => setTrendingInterval(e.target.value)} class="slider" id="trendingIntervalRange" step="1"/>
 
            </div>

@@ -320,7 +320,7 @@ const confirmSell = () => {
           height: 800,
           width: "100%",
           marginRight: "0px",
-          marginLeft: "0px",
+          marginLeft: "0px"
         }}
       />
       <div>

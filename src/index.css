@@ -52,6 +52,23 @@ td{
     /* margin-right: auto; */
 }
 
+.smlbtn {
+  /* padding: 10px;
+  text-align: center;*/
+  width: 50px;
+  background: grey;
+  /* display: block;
+  margin-left: auto;
+  margin-right: auto; */
+}
+
+.headbtn {
+  border:2px solid grey;
+  font-size: 20px;
+  margin: auto;
+  text-align: center;
+}
+
 a{
   color:#C0C0C0;
   text-decoration: none;
@@ -61,15 +78,6 @@ a{
   margin: auto;
 }
 
-.smlbtn {
-    /* padding: 10px;
-    text-align: center;*/
-    width: 50px;
-    background: grey;
-    /* display: block;
-    margin-left: auto;
-    margin-right: auto; */
-}
 
 table{
   width: 100%;
@@ -78,7 +86,6 @@ table{
 .table{
   padding: 20px;
   margin: 20px;
-  /* border: 2px solid white; */
 }
 .module{
   margin: 2px;

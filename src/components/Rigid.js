@@ -1579,7 +1579,6 @@ names = [...newNames];
 
   return (
     <>
-      <ManyMarkets/>
       <SimpleArray/>
       <SimpleArrayAsDots/>
       <SimpleArrayAsDotsSized/>
@@ -1604,10 +1603,11 @@ names = [...newNames];
       <SimpleRibbon/>
       <SomeWeightedFancyRibbon/>
       <SomeWeightedFancyRibbonDexguruData/>
+      {
+        // <ManyMarkets/>
+      }
     </>
   );
 }
-// <SomeWeightedFancyRibbon/>
-
 
 export default Rigid;

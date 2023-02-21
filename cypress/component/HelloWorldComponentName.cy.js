@@ -1,7 +1,6 @@
 import PerspectiveTokensPureComponent from "../../src/components/PerspectiveTokensPureComponent";
 import Accounts from "../../src/components/Accounts";
 
-
 const dispatcher = async (msg,payload,state={}) => {
 
   switch(msg){

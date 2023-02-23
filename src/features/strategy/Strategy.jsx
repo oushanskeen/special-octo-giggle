@@ -111,19 +111,24 @@ export default function Strategy(){
   }
 
   const GetPerspectiveTokensButton = () => {
-
-    const tokens = useSelector(state => state)
-
-    useEffect(() => {},[tokens])
-
-    // const some  = await
-    console.log("STATE: ", tokens)
-
     return (<>
-        <button onClick={async (e) => await dispatch(fetchPerspectiveTokens()).unwrap()}>
+        <button onClick={(e) => dispatch(fetchPerspectiveTokens())}>
             get perspective tokens
         </button>
         <div>{JSON.stringify(tokens)}</div>
+      </>
+    )
+  }
+
+  const GetPerspectiveTokenTable = () => {
+
+    let tokens = Object.keys(useSelector(state => state.strategy.perspectiveTokens))
+
+    return (<>
+        <div>GET PERSPECTIVE TOKENS</div>
+        {
+          // tokens.map(token => JSON.stringify(token))
+        }
       </>
     )
   }
@@ -135,6 +140,7 @@ export default function Strategy(){
             <ChainsSlider/>
             <GainsThresholdSlider/>
             <GetPerspectiveTokensButton/>
+            <GetPerspectiveTokenTable/>
        </div>
     </>
   );

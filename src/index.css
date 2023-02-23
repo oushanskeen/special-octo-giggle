@@ -90,7 +90,7 @@ table{
 .module{
   margin: 2px;
   padding: 2px;
-  border:2px solid green;
+  /* border:2px solid green; */
   background-color: #202020;
   color: #909090;
   text-align: center;

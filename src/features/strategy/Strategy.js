@@ -245,54 +245,13 @@ export default function Strategy(){
     )
   }
 
-  const Pokemon = () => {
-
-    // const strategyState = useSelector(state => state.strategy)
-    // let {interval, chain, gainsThreshold, subInterval} = strategyState
-    //
-    //
-    // const { refetch, data, error, isLoading, isFetching } = useGetPokemonByNameQuery({
-    //   interval: interval,
-    //   chainId: chain,
-    //   gainThreshold: gainsThreshold,
-    //   subInterval: subInterval
-    // })
-    //
-    // console.log("QUERY PARAMS: ", useGetPokemonByNameQuery)
-    //
-    // const doRefetch = () => {
-    //   console.log("BEFORE REFATCH PARAMS: ", strategyState)
-    //   // console.log("BEFORE REFATCH LOCAL PARAMS: ", myState)
-    //   refetch()
-    // }
-    //
-    //
-    // return (<>
-    //     <div>
-    //       {
-    //         isFetching
-    //         ? <h1>...perspective tokens pending for default strategy</h1>
-    //         :
-    //           data.tokens.length == 0
-    //           ? <h1>seems nothing interesting for default strategy</h1>
-    //           : <div>{data.tokens.map((token,id) => <div>id:{id} token:{token}</div>)}</div>
-    //           // <button onClick={() => doRefetch()}>recalculate</button>
-    //       }
-    //     </div>
-    //   </>)
-  }
-
   return (<>
         <div class="module box">
             <IntervalSlider/>
             <SubIntervalSlider/>
             <ChainsSlider/>
             <GainsThresholdSlider/>
-            {
-              // <GetPerspectiveTokensButton/>
-            }
           </div>
-          <Pokemon/>
           <div>
             <PerspectiveTokenTable/>
           </div>

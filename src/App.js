@@ -31,7 +31,6 @@ function App() {
           <BrowserRouter>
               <div class="module box headbtn">
                   <td><Link to="/special-octo-giggle">recent_version</Link></td>
-                  <td><Link to="/special-octo-giggle/pure">pure(upcoming)</Link></td>
                   <td><Link to="/special-octo-giggle/d3">d3_experiments</Link></td>
                   <td><Link to="/special-octo-giggle/old">old_game</Link></td>
                   <td><Link to="/special-octo-giggle/hooks">hooks</Link></td>

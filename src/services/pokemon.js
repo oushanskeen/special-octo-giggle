@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
-let BASE_URL = "https://api-stage-lax.dexguru.biz"
+let BASE_URL = "https://deals-stage-lax.dexguru.biz"
 
 export const pokemonApi = createApi({
   reducerPath: 'strategyApi',
@@ -16,7 +16,6 @@ export const pokemonApi = createApi({
     }),
     getTokenByName: builder.query({
       query: ({tokenId,chainId}) => {
-
         let chains = {
           1: "eth",
           10: "optimism",
@@ -28,24 +27,21 @@ export const pokemonApi = createApi({
           100: "gnosis",
           42220: "celo"
         }
-
         let requestBody = "{\"ids\":[\"" + tokenId + "-" + chains[chainId] + "\"],\"limit\":1,\"network\":\"" + chains[chainId] + "\"}";
         console.log("TOKEN REQUEST BODY: ", requestBody);
-        // let response = await fetch("https://api-stage.dex.guru/v3/tokens", {
-        //       "body": requestBody,
-        //       "method": "POST",
-        //   });
-
         return ({
           url: "/v3/tokens/",
           method: "POST",
           body: requestBody,
-
         })
-        // console.log("QUERY: ", `/v1/deals/find?interval=${interval}&chain_id=${chainId}&gain_threshold=${gainThreshold}&trending_interval=${subInterval}`)
-        // return `/v1/deals/find?interval=${interval}&chain_id=${chainId}&gain_threshold=${gainThreshold}&trending_interval=${subInterval}`
+      },
+    }),
+    getAllStrategies: builder.query({
+      query: () => {
+        console.log("QUERY: ", `/v1/deals/strategies`)
+        return `/v1/deals/strategies`
       },
     }),
   }),
 })
-export const { useGetPokemonByNameQuery, useGetTokenByNameQuery } = pokemonApi
+export const { useGetPokemonByNameQuery, useGetTokenByNameQuery, useGetAllStrategiesQuery } = pokemonApi

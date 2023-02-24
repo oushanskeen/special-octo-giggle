@@ -173,7 +173,7 @@ export default function Strategy(){
       subInterval: subInterval
     })
 
-    let tokens = data && data.tokens
+    let tokens = data && data.tokens.map(token => token.address)
     console.log("TOKENS: ", tokens)
 
     const PerspectiveToken = ({tokenData}) => {
@@ -247,14 +247,14 @@ export default function Strategy(){
 
   return (<>
         <div class="module box">
-            <IntervalSlider/>
-            <SubIntervalSlider/>
-            <ChainsSlider/>
-            <GainsThresholdSlider/>
-          </div>
-          <div>
-            <PerspectiveTokenTable/>
-          </div>
+          <IntervalSlider/>
+          <SubIntervalSlider/>
+          <ChainsSlider/>
+          <GainsThresholdSlider/>
+        </div>
+        <div>
+          <PerspectiveTokenTable/>
+        </div>
     </>
   );
 }

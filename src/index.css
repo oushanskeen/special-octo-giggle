@@ -130,6 +130,10 @@ table{
 }
 
 .pointer {cursor: pointer;}
+.pointer:hover {
+  /* background: #101010; */
+  color: #B0B0B0;
+}
 
 .dev_module{
   margin: 2px;
@@ -180,6 +184,11 @@ p {
   opacity: 0.7;
   -webkit-transition: .2s;
   transition: opacity .2s;
+}
+
+input{
+    background: grey;
+    border: none;
 }
 
 .sliderbox{

@@ -2,7 +2,7 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { selectStrategyInterval, setInterval, setChain, setGainsThreshold, setSubInterval, fetchPerspectiveTokens, savePerspectiveTokens, fetchPerspectiveToken, savePerspectiveToken } from './strategySlice'
-import { useGetPokemonByNameQuery } from '../../services/pokemon'
+import { useGetPokemonByNameQuery, useGetTokenByNameQuery } from '../../services/pokemon'
 
 
 export default function Strategy(){
@@ -163,22 +163,6 @@ export default function Strategy(){
 
   const PerspectiveTokenTable = () => {
 
-    // let interval = useSelector(state => state.strategy.interval)
-    // let subInterval = useSelector(state => state.strategy.subInterval)
-    // let chain = useSelector(state => state.strategy.chain)
-    // let gainsThreshold = useSelector(state => state.strategy.gainsThreshold)
-    // let strategy = interval + " " + subInterval + " " + chain + " " + gainsThreshold
-    //
-    // let tokens = useSelector(state => Object.values(state.strategy.perspectiveTokens).map(
-    //   ({name, id, volume24hUSD, liquidityUSD, priceUSD, priceUSDChange24h}) =>
-    //   ({id, name, volume24hUSD, liquidityUSD, priceUSD, priceUSDChange24h,"strategy":strategy,"button":"button"})
-    // ))
-    //
-    // console.log("TOKENS PROCESSED: ", tokens)
-    //
-    // let apiData = useSelector(state => Object.entries(state.strategyApi.queries).filter(record => record[0].includes("getPokemonByName")))[0][1].data.tokens
-    // console.log("API DATA: ", apiData)
-
     const strategyState = useSelector(state => state.strategy)
     let {interval, chain, gainsThreshold, subInterval} = strategyState
 
@@ -200,33 +184,50 @@ export default function Strategy(){
           console.log("HANDLE BUY: ", payload);
       }
 
-      // Object.entries(tokenData)
-      // .map((record,i) => (<td>
-        //   {
-          //     record[1] == "button"
-          //     ? <div class="btn" onClick={() => handleBuy(tokenData.id)}>buy</div>
-          //     : record[0] == "strategy"
-          //       ? <div class="strategy">{record[1]}</div>
-          //       : record[0] == "id"
-          //         ? <a href={"https://dex.guru/token/" + record[1]}>{record[1]}</a>
-          //         : record[1]
-          //   }
-          //   </td>))
-          // </div>
-          // }
+      let chainId = useSelector(state => state.strategy.chain)
+
+      const { refetch, data, error, isLoading, isFetching } = useGetTokenByNameQuery({
+        // interval: interval,
+        tokenId: tokenData,
+        chainId: chain,
+        // gainThreshold: gainsThreshold,
+        // subInterval: subInterval
+      })
+
+      data && console.log("DATA: ", data)
+      let name, volume, liquidity, price, delta
+      if(data){
+        // let {name, volume24hUSD, liquidityUSD} = data.data[0]
+        name = data.data[0].name
+        volume = data.data[0].volume24hUSD
+        liquidity = data.data[0].liquidityUSD
+        price = data.data[0].priceUSD
+        delta = data.data[0].priceUSDChange24h
+      }
+
       return (<div class="perspectiveTokenRecord module box">
-        <td>
-          {tokenData}
-        </td>
+        <>
+          {
+            isFetching
+            ? <td>...token data is fetching</td>
+            : <>
+                <td>{tokenData}</td>
+                <td>{name}</td>
+                <td>{volume}</td>
+                <td>{liquidity}</td>
+                <td>{price}</td>
+                <td>{delta}</td>
+                <td>strategy</td>
+                <td><div class="btn">buy</div></td>
+              </>
+          }
+        </>
       </div>)
     }
 
 
     return (<>
-        <div>GET PERSPECTIVE TOKENS</div>
-        {
-          isFetching && <h1>...is loading</h1>
-        }
+        <div>GET PERSPECTIVE TOKENS {isFetching && <p>...is loading</p>}</div>
         <div class="perspectiveTokenRecord module box">
           {
             ["id","name","volume","liquidity","price","delta","strategy",""].map(head => (

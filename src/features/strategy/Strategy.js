@@ -4,6 +4,17 @@ import { useSelector, useDispatch } from 'react-redux'
 import { selectStrategyInterval, setInterval, setChain, setGainsThreshold, setSubInterval, fetchPerspectiveTokens, savePerspectiveTokens, fetchPerspectiveToken, savePerspectiveToken } from './strategySlice'
 import { useGetPokemonByNameQuery, useGetTokenByNameQuery } from '../../services/pokemon'
 
+let chains = {
+  1: "eth",
+  10: "optimism",
+  56: "bsc",
+  137: "polygon",
+  250: "fantom",
+  42161: "arbitrum",
+  43114: "avalanche",
+  100: "gnosis",
+  42220: "celo"
+}
 
 export default function Strategy(){
 
@@ -37,17 +48,6 @@ export default function Strategy(){
 
     const chain = useSelector(state => state.strategy.chain)
 
-    let chains = {
-      1: "eth",
-      10: "optimism",
-      56: "bsc",
-      137: "polygon",
-      250: "fantom",
-      42161: "arbitrum",
-      43114: "avalanche",
-      100: "gnosis",
-      42220: "celo"
-    }
     let chainIds = Object.keys(chains)
 
     return(
@@ -209,15 +209,15 @@ export default function Strategy(){
         <>
           {
             isFetching
-            ? <td>...token data is fetching</td>
+            ? <td style={{width:'100%'}}>...fetching data for {tokenData}</td>
             : <>
-                <td>{tokenData}</td>
+                <td><a href={"https://dex.guru/token/" + tokenData + "-" + chains[chainId]}>{tokenData}</a></td>
                 <td>{name}</td>
                 <td>{volume}</td>
                 <td>{liquidity}</td>
                 <td>{price}</td>
                 <td>{delta}</td>
-                <td>strategy</td>
+                <td><div class='btn' onClick={refetch}>refetch</div></td>
                 <td><div class="btn">buy</div></td>
               </>
           }
@@ -225,20 +225,21 @@ export default function Strategy(){
       </div>)
     }
 
+    const [text, setText] = useState("")
 
     return (<>
-        <div>GET PERSPECTIVE TOKENS {isFetching && <p>...is loading</p>}</div>
+      <div class="pointer" onClick={refetch} onMouseOver={() => setText("...REFETCH")} onMouseOut={() => setText("")} >GET PERSPECTIVE TOKENS {text} {isFetching && <p>...is loading</p>}</div>
         <div class="perspectiveTokenRecord module box">
-          {
-            ["id","name","volume","liquidity","price","delta","strategy",""].map(head => (
+          { tokens && tokens.length > 0 ?
+            ["id","name","volume","liquidity","price","delta","",""].map(head => (
               <td>
                 {head}
               </td>)
-            )
+            ) : isFetching ? "" : <div class="module" style={{width:"100%"}}>no tokens found, try other params</div>
           }
       </div>
         {
-          tokens && tokens.map(tokenData => <PerspectiveToken tokenData={tokenData}/>)
+          tokens && tokens.map(tokenData => <PerspectiveToken tokenData={tokenData}/> || <div> no ... </div>)
         }
       </>
     )

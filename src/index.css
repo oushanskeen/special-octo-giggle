@@ -39,6 +39,7 @@ td{
 }
 
 .btn {
+    cursor: pointer;
     padding: 1%;
     /* text-align: center; */
     width: 100px;
@@ -78,7 +79,6 @@ a{
   margin: auto;
 }
 
-
 table{
   width: 100%;
   padding: 0px;
@@ -90,11 +90,47 @@ table{
 .module{
   margin: 2px;
   padding: 2px;
-  /* border:2px solid green; */
+  border:2px solid green;
   background-color: #202020;
   color: #909090;
   text-align: center;
 }
+
+/* Tooltip container */
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 100px;
+  background-color: grey;
+  color: black;
+  text-align: center;
+  opacity: 0.5;
+  padding: 5px;
+  /* border-radius: 6px; */
+
+  /* Position the tooltip text - see examples below! */
+  position: relative;
+  z-index: 1;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
+.textButton:hover {
+  /* background: #101010; */
+  color: #B0B0B0;
+}
+
+.pointer {cursor: pointer;}
+
 .dev_module{
   margin: 2px;
   padding: 10px;

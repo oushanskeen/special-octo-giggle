@@ -14,11 +14,24 @@ export default function AddStrategy(){
   // "trending_interval": 0,
   // "minimum_stable_starting_balance": 0
 
+  const saveStubStrategy = async () => {
+      const send = await fetch('https://deals-stage-lax.dexguru.biz/v1/deals/strategies',{
+         method: "POST",
+         body: JSON.stringify({
+            "strategy_type": "string",
+            "strategy_name": "" + Date.now(),
+            "gain_threshold": 0,
+            "sell_threshold": 0,
+            "gain_interval": 0,
+            "trending_interval": 0,
+            "minimum_stable_starting_balance": 0
+        })
+      })
+  }
+
   return (
     <div class="module">
-      <h3>add strategy</h3>
       <div class="module box">
-        <div class="btn" style={{width:"10"}}>+</div>
         <form>
           <section>
               <input placeholder="type"/>
@@ -35,6 +48,7 @@ export default function AddStrategy(){
             <label>
               <input placeholder="trending interval"/>
             </label>
+            <div class='btn' onClick={saveStubStrategy}>save strategy</div>
           </section>
         </form>
       </div>

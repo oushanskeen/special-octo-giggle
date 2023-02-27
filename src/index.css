@@ -12,6 +12,8 @@ tr {
   color: "red";
 }
 
+
+
 td, th {
   /* display: block; */
   width: 16.6%;
@@ -29,6 +31,12 @@ td, th {
     /* width: 80px; */
     /* height: 32px; */
 }
+
+.center{
+  display: flex;
+  justify-content: center;
+}
+
 .header{
   display:flex;
   padding: auto;

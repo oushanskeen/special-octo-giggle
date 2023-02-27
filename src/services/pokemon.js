@@ -42,6 +42,11 @@ export const pokemonApi = createApi({
         return `/v1/deals/strategies`
       },
     }),
+    getTokenCandles: builder.query({
+      query: (token) => {
+        return `v1/tradingview/history?symbol=${token}-eth_USD&resolution=240&from=1672731580&to=1677339580`
+      },
+    }),
   }),
 })
-export const { useGetPokemonByNameQuery, useGetTokenByNameQuery, useGetAllStrategiesQuery } = pokemonApi
+export const { useGetPokemonByNameQuery, useGetTokenByNameQuery, useGetAllStrategiesQuery, useGetTokenCandlesQuery } = pokemonApi

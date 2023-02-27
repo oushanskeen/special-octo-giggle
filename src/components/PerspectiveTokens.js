@@ -11,7 +11,6 @@ const PerspectiveTokens = () => {
       <div class="perspectiveTokens module">
           <Strategy/>
           <StrategiesList/>
-          <AddStrategy/>
       </div>
   );
 }

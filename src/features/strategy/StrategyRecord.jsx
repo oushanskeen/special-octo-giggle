@@ -34,7 +34,12 @@ export default function StrategyRecord({data}){
         <td>{data.trending_interval}</td>
         <td>{data.minimum_stable_starting_balance}</td>
         <td class="pointer" onClick={() => setBalanceUnfold(!balanceUnfold)}>balances</td>
-        <td><div class='btn' onClick={handleDeleteSrategy}>x</div></td>
+        {
+              (data.strategy_name == "test_strat")
+              ? <td><div class='btn'>default</div></td>
+              : <td><div class='btn' onClick={handleDeleteSrategy}>delete</div></td>
+          // }
+        }
       </div>
     )
   }

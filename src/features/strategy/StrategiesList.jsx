@@ -15,6 +15,8 @@ export default function StrategiesList(){
   //   return <div>updating...</div>;
   // }
 
+  const [isAddStrategyFormVisible, setStrategyFormVisibility] = useState(false)
+
   if (isLoading || isFetching) {
     return <div>loading...</div>;
   }
@@ -24,17 +26,26 @@ export default function StrategiesList(){
     return <div>{error.status}</div>;
   }
 
+
   return (
     <>
-      <AddStrategy/>
+     <div class="module" style={{margin:"auto", padding:"17px", justifyContent:"center",alignItems:"center"}}>
+        <h3 style={{margin:"auto"}}>STRATEGIES </h3>
+        <div class="btn" style={{height:"20px",padding:"0px",margin:"auto"}} onClick={() => setStrategyFormVisibility(!isAddStrategyFormVisible)}>+</div>
+    </div>
+      {
+        isAddStrategyFormVisible && <AddStrategy/>
+      }
+      <div class="module box">
       { data &&
         ["type","name","wallet","gain threshold","sell thld","gain int","trend int","start blns","balances","delete"].map(head => (
-          <td style={{width:"10.71%"}}>
+          <th>
             {head}
-          </td>)
+          </th>)
         )
          // : isFetching ? "" : <div class="module" style={{width:"100%"}}>no strategies found</div>
       }
+      </div>
       {
           data?.map(strategy => <StrategyRecord data={strategy}/>)
       }

@@ -243,8 +243,7 @@ export default function AddStrategy(){
   }
 
   return (
-    <div class="module">
-      <div class="module box">
+    <div class="module box">
         <StrategyTypeInput/>
         <StrategyNameInput/>
         <GainThresholdInput/>
@@ -253,7 +252,6 @@ export default function AddStrategy(){
         <TrendingIntervalInput/>
         <StartBalanceInput/>
         <SubmitButton/>
-      </div>
     </div>
   )
 }

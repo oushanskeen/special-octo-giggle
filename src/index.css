@@ -48,6 +48,10 @@ td{
   font-size: 12px;
 }
 
+th{
+  font-size: 13px;
+}
+
 .btn {
     cursor: pointer;
     padding: 1%;

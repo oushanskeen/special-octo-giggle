@@ -238,13 +238,13 @@ export default function Strategy(){
     const [text, setText] = useState("")
 
     return (<>
-      <div class="pointer" onClick={refetch} onMouseOver={() => setText("...REFETCH")} onMouseOut={() => setText("")} >GET PERSPECTIVE TOKENS {text} {isFetching && <p>...is loading</p>}</div>
+      <h3 class="pointer module" onClick={refetch} onMouseOver={() => setText("...REFETCH")} onMouseOut={() => setText("")} >PERSPECTIVE TOKENS {text} {isFetching && <p>...is loading</p>}</h3>
         <div class="perspectiveTokenRecord module box">
           { tokens && tokens.length > 0 ?
             ["id","name","volume","liquidity","price","delta","",""].map(head => (
-              <td>
+              <th>
                 {head}
-              </td>)
+              </th>)
             ) : isFetching ? "" : <div class="module" style={{width:"100%"}}>no tokens found, try other params</div>
           }
       </div>

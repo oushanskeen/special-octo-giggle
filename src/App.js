@@ -14,7 +14,7 @@ import { Counter } from "./features/counter/Counter"
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 
 import './index.css';
-import store from './app/store'
+import { store } from './app/store'
 import { Provider } from 'react-redux'
 
 const data2 = [];

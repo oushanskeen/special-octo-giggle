@@ -5,7 +5,7 @@ const QuantitySelector = () => {
     const {onClickPlus, onClickMinus, state } = useQuantitySelector()
     const { value, message } = state
     return (
-        <div class='quantitySelector'>
+        <div class='quantitySelector module'>
             <h3>DDD component</h3>
             <button onClick ={onClickMinus} class="button">
                 -

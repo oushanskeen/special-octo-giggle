@@ -12,7 +12,9 @@ tr {
   color: "red";
 }
 
+div{
 
+}
 
 td, th {
   /* display: block; */
@@ -51,12 +53,14 @@ td{
     padding: 1%;
     /* text-align: center; */
     width: 100px;
-    background: grey;
     display: block;
     color: #202020;
     /* border: auto; */
     margin: auto;
     text-align: center;
+    background: grey;
+    /* border: 1px solid white; */
+
     /* margin-top: auto; */
     /* margin-right: auto; */
 }
@@ -97,7 +101,7 @@ table{
 }
 .module{
   margin: 2px;
-  padding: 2px;
+  padding: 8px;
   border:2px solid green;
   background-color: #202020;
   color: #909090;
@@ -194,10 +198,22 @@ p {
   transition: opacity .2s;
 }
 
+.strategyTab{
+  width: 12.5%;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 input{
     background: grey;
     border: none;
+    width: 90%;
+    text-align: center;
 }
+
+
 
 .sliderbox{
   width:25%;

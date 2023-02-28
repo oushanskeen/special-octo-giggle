@@ -2,11 +2,13 @@
 
 import React from 'react'
 import DDD from './DDD'
+import CRUD from './CRUD'
 
 const BestPractices = () => {
   return (
     <div class="module">
       <DDD/>
+      <CRUD/>
     </div>
   )
 }

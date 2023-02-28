@@ -2,11 +2,25 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 let BASE_URL = "https://deals-stage-lax.dexguru.biz"
 
+// const send = await fetch('https://deals-stage-lax.dexguru.biz/v1/deals/strategies',{
+//    method: "POST",
+// })
+// const strategy =  JSON.stringify({
+//   "strategy_type": "string",
+//   "strategy_name": "" + Date.now(),
+//   "gain_threshold": 0,
+//   "sell_threshold": 0,
+//   "gain_interval": 0,
+//   "trending_interval": 0,
+//   "minimum_stable_starting_balance": 0
+// })
+
 export const pokemonApi = createApi({
   reducerPath: 'strategyApi',
   // baseQuery: fetchBaseQuery({ baseUrl: 'https://pokeapi.co/api/v2/' }),
   baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
   keepUnusedDataFor: 0,
+  tagTypes: ['Post','Patch','Delete'],
   endpoints: (builder) => ({
     getPokemonByName: builder.query({
       query: ({interval,chainId,gainThreshold,subInterval}) => {
@@ -41,12 +55,67 @@ export const pokemonApi = createApi({
         console.log("QUERY: ", `/v1/deals/strategies`)
         return `/v1/deals/strategies`
       },
+      providesTags: ['Post']
     }),
     getTokenCandles: builder.query({
       query: (token) => {
         return `v1/tradingview/history?symbol=${token}-eth_USD&resolution=240&from=1672731580&to=1677339580`
       },
     }),
+    patchStrategy: builder.mutation({
+      query: (strategy) => ({
+        url: "/v1/deals/strategies",
+        method: 'POST',
+        body:
+          {
+              "strategy_type": strategy.type,
+              "strategy_name": strategy.name,
+              "gain_threshold": strategy.gainsThreshold,
+              "sell_threshold": strategy.sellThreshold,
+              "gain_interval": strategy.gainInterval,
+              "trending_interval": strategy.trendingInterval,
+              "minimum_stable_starting_balance": strategy.startBalance
+          },
+      }),
+      async onQueryStarted(props, { dispatch, queryFulfilled }) {
+        await queryFulfilled
+        // let payload = await data
+        // console.log("QUERY FILLED: ", data)
+        setTimeout(() => {
+          dispatch(pokemonApi.util.invalidateTags(['Post']))
+        }, 1000)
+      },
+      transformResponse: (response) => {
+        console.log("PATCH RESPONSE: ", response)
+        console.log("pokemonApi: ", pokemonApi)
+      },
+      // invalidatesTags: ['Post']
+    }),
+    deleteStrategy: builder.mutation({
+      query: (strategyName) => {
+        console.log("DELETE MUTATION strategyName, ", strategyName)
+        console.log("QUERY: ", "/v1/deals/strategies/delete/?strategy_name=" + strategyName)
+        return {
+          url: "/v1/deals/strategies/delete/?strategy_name=" + strategyName,
+          method: 'DELETE'
+        }
+      },
+      async onQueryStarted(props, { dispatch, queryFulfilled }) {
+        await queryFulfilled
+        // let payload = await data
+        // console.log("QUERY FILLED: ", data)
+        setTimeout(() => {
+          dispatch(pokemonApi.util.invalidateTags(['Post']))
+        }, 1000)
+      },
+      // transformResponse: (response) => {
+      //   console.log("DELETE RESPONSE: ", response)
+      //   console.log("pokemonApi: ", pokemonApi)
+      // },
+      // invalidatesTags: ['Post']
+
+      // providesTags: ['Post']
+    }),
   }),
 })
-export const { useGetPokemonByNameQuery, useGetTokenByNameQuery, useGetAllStrategiesQuery, useGetTokenCandlesQuery } = pokemonApi
+export const { useGetPokemonByNameQuery, useGetTokenByNameQuery, useGetAllStrategiesQuery, useGetTokenCandlesQuery, usePatchStrategyMutation, useDeleteStrategyMutation } = pokemonApi

@@ -1,7 +1,17 @@
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { selectStrategyInterval, setInterval, setChain, setGainsThreshold, setSubInterval, fetchPerspectiveTokens, savePerspectiveTokens, fetchPerspectiveToken, savePerspectiveToken } from './strategySlice'
+import {
+    selectStrategyInterval,
+    setInterval,
+    setChain,
+    setGainsThreshold,
+    setSubInterval,
+    fetchPerspectiveTokens,
+    savePerspectiveTokens,
+    fetchPerspectiveToken,
+    savePerspectiveToken
+} from './strategySlice'
 import { useGetPokemonByNameQuery, useGetTokenByNameQuery } from '../../services/pokemon'
 
 let chains = {

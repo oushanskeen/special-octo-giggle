@@ -5,6 +5,15 @@ import { useSelector, useDispatch } from 'react-redux'
 const initialState = {
   interval: 60,
   subInterval: 60,
+
+  type: "",
+  name: "",
+  gainsThreshold: 60,
+  sellThreshold: 10,
+  gainInterval: 60,
+  trendingInterval: 0,
+  startBalance: 0,
+
   chain: 1,
   gainsThreshold: 0.01,
   perspectiveTokens: {0:0},
@@ -101,6 +110,12 @@ const strategySlice = createSlice({
   name: 'strategy',
   initialState,
   reducers: {
+    setType: (state, action) => {
+      state.type = action.payload
+    },
+    setName: (state, action) => {
+      state.name = action.payload
+    },
     setInterval: (state, action) => {
       state.interval = action.payload
     },
@@ -110,8 +125,18 @@ const strategySlice = createSlice({
     setGainsThreshold: (state, action) => {
       state.gainsThreshold = action.payload
     },
+    setSellThreshold: (state, action) => {
+      state.sellThreshold = action.payload
+    },
+    setGainInterval: (state, action) => {
+      console.log("GAIN INTERVAL: ", action.payload)
+      state.gainInterval = action.payload
+    },
     setSubInterval: (state, action) => {
       state.subInterval = action.payload
+    },
+    setStartBalance: (state, action) => {
+      state.startBalance = action.payload
     },
     savePerspectiveTokens: (state, action) => {
       console.log("SAVE PERSPECTIVE TOKEN ", action.payload)
@@ -155,6 +180,6 @@ export const selectStrategyInterval = state => {
   return state.strategy.interval
 }
 
-export const { setInterval, setChain, setGainsThreshold, setSubInterval, savePerspectiveTokens, savePerspectiveToken } = strategySlice.actions
+export const { setType, setName, setInterval, setGainInterval, setChain, setGainsThreshold, setSellThreshold, setSubInterval, savePerspectiveTokens, savePerspectiveToken, setStartBalance } = strategySlice.actions
 
 export default strategySlice.reducer

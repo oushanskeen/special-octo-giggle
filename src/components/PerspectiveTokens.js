@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import Strategy from "../features/strategy/Strategy"
 import StrategiesList from "../features/strategy/StrategiesList"
 import AddStrategy from "../features/strategy/AddStrategy"
+import Wallets from "../features/wallets/Wallets"
 
 const PerspectiveTokens = () => {
 
@@ -11,6 +12,7 @@ const PerspectiveTokens = () => {
       <div class="perspectiveTokens module">
           <Strategy/>
           <StrategiesList/>
+          <Wallets/>
       </div>
   );
 }

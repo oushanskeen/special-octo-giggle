@@ -3,6 +3,7 @@ import ChartContainer from "./features/plot/ChartContainer";
 import CandlesBarSimple from "./components/CandlesBarSimple";
 import PerspectiveTokens from "./components/PerspectiveTokens";
 import BestPractices from "./features/knowledge/BestPractices"
+import LinksTree from './features/charts/LinksTree'
 
 import PerspectiveTokensPureComponent from "./components/PerspectiveTokensPureComponent"
 import TradingGame from "./components/TradingGame"
@@ -32,12 +33,13 @@ function App() {
       <Provider store={store}>
           <BrowserRouter>
               <div class="module box headbtn">
-                  <td><Link to="/special-octo-giggle">recent_version</Link></td>
-                  <td><Link to="/special-octo-giggle/d3">d3_experiments</Link></td>
-                  <td><Link to="/special-octo-giggle/old">old_game</Link></td>
+                  <td><Link to="/special-octo-giggle">main</Link></td>
+                  <td><Link to="/special-octo-giggle/d3">d3</Link></td>
+                  <td><Link to="/special-octo-giggle/old">game</Link></td>
                   <td><Link to="/special-octo-giggle/hooks">hooks</Link></td>
                   <td><Link to="/special-octo-giggle/plots">plots</Link></td>
                   <td><Link to="/special-octo-giggle/bp">best_practices</Link></td>
+                  <td><Link to="/special-octo-giggle/pm">progress</Link></td>
               </div>
               <Routes>
                   <Route path="/special-octo-giggle" element={ <PerspectiveTokens/> } />
@@ -48,6 +50,7 @@ function App() {
                   <Route path="/special-octo-giggle/counter" element={ <Counter/> } />
                   <Route path="/special-octo-giggle/hooks" element={ <Hooks/> } />
                   <Route path="/special-octo-giggle/bp" element={ <BestPractices/> } />
+                  <Route path="/special-octo-giggle/pm" element={ <LinksTree/> } />
               </Routes>
           </BrowserRouter>
         </Provider>

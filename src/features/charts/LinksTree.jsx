@@ -64,13 +64,13 @@ const oracle = {
         "name":"updating token record",
         "status":"ready",
         "description":
-          "IN ORDER TO get updated token data or prevent stuck load \n"+
+          "IN ORDER TO get updated token data or prevent load stuck \n"+
           "AS A user \n" +
           "I NEED A token refetch \n" +
           "\n" +
           "GIVEN token record stuck fetch and token refetch button \n" +
           "WHEN click refetch \n" +
-          "THEN see loader \n " +
+          "THEN see loader \n" +
           "THEN see token actual data"
       },
       {
@@ -85,7 +85,7 @@ const oracle = {
         "name":"saving oracle request params",
         "status":"ready",
         "description":
-          "IN ORDER TO save oracle query in strategy"+
+          "IN ORDER TO save oracle query in strategy \n"+
           "AS A developer \n" +
           "I NEED A saving option \n" +
           "\n" +
@@ -98,7 +98,7 @@ const oracle = {
         "description":
           "IN ORDER TO avoid absence of data for perspective tokens \n"+
           "AS A developer \n" +
-          "I NEED A ... ? \n"
+          "I NEED A ... ?"
       }
   ]
 }
@@ -110,7 +110,7 @@ const strategyControls = {
         "name":"addStrategy",
         "status":"ready",
         "description":
-            "IN ORDER TO store set strategy"+
+            "IN ORDER TO store set strategy \n"+
             "AS A user \n" +
             "I NEED A relevant controls \n" +
             "\n" +
@@ -129,18 +129,29 @@ const strategyControls = {
         "name":"deleteStrategy",
         "status":"ready",
         "description":
-            "IN ORDER TO delete \n"+
+            "IN ORDER TO remove wrong/unused strategy \n"+
             "AS A user \n" +
-            "I NEED A saving option \n" +
+            "I NEED A delete option \n" +
             "\n" +
-            "GIVEN oracle query selected \n" +
-            "THEN can retrieve it from state"
+            "GIVEN strategy record with delete button \n" +
+            "WHEN click button \n" +
+            "THEN processing status appears \n" +
+            "THEN table is reloaded without deleted record"
       },
       {
-        "name":"disable editing existing strategy"
+        "name":"disable editing existing strategy",
+        "description":
+            "IN ORDER TO avoid rewriting existing strategy \n" +
+            "AS A user \n " +
+            "I NEED A notification in case of invalid input"
       },
       {
-        "name":"disable submiting invalid strategy input"
+        "name":"disable submiting invalid strategy input",
+        "description":
+            "IN ORDER TO avoid accidental strategy submitting \n" +
+            " with invalidated state \n" +
+            "AS A user \n " +
+            "I NEED A blocked submit button until all fields are correct"
       },
   ]
 }
@@ -151,7 +162,7 @@ const strategyStatistics = {
       "name":"getStrategies",
       "status":"ready",
       "description":
-          "IN ORDER TO see strategies"+
+          "IN ORDER TO see strategies \n"+
           "AS A user \n" +
           "I NEED A strategies table \n" +
           "\n" +
@@ -189,32 +200,74 @@ const strategyControlsAndSatistics = {
 const tradingControlsAndSatistics = {
   "name":"tradingControlsAndSatistics",
   "children":
-  [{
+  [
+    {
     "name":"wallet",
     "description":"",
     "children":[
         {
           "name":"getting wallet",
-          "status":"ready"
+          "status":"ready",
+          "description":
+            "IN ORDER TO manage resources \n" +
+            "AS A user \n" +
+            "I NEED A wallet \n" +
+            "\n" +
+            "GIVEN main page \n" +
+            "THEN wallet is loaded"
         },
         {
           "name":"buying token",
-          "status":"wip"
+          "status":"wip",
+          "description":"IN ORDER TO start trading \n" +
+          "AS A user \n" +
+          "I NEED A buy token interface \n" +
+          "\n" +
+          "GIVEN wallet loaded and perspective tokens loaded \n" +
+          "WHEN click on \"buy\" button at token record \n" +
+          "THEN buy interface unfolds underneath the token record \n" +
+          "\n" +
+          "THEN \n" +
+          " - chain is selected \n" +
+          " - token to buy is selected \n" +
+          "WHEN \n" +
+          " - select wallet address \n" +
+          " - select input stable amount \n" +
+          " - ... ? \n" +
+          "THEN \n" +
+          " - interface reflects balance change \n" +
+          " - ... ? " +
+          "+ \"wallet_address\"\n" +
+          "+ \"chain_id\"\n" +
+          "+ \"token_buy_address\"\n" +
+          "+ \"token_sell_address\"\n" +
+          "+ \"stable_amount\"\n" +
+          "?\"wallet_buy_balance\"\n" +
+          "?\"wallet_sell_balance\"\n" +
+          "?\"block_number\"\n" +
+          "~\"timestamp\""
         },
         {
-          "name":"buying more token"
+          "name":"buying more token",
+          "description":"... see buy token"
         },
         {
-          "name":"selling token"
+          "name":"selling token",
+          "description":
+          "... does it have to be at the wallet ? \n" +
+          "or at the token record as with \"buy\" button"
         },
         {
-          "name":"tracking gain/loss"
+          "name":"tracking gain/loss",
+          "description":"same to dexguru interface?"
         },
         {
-          "name":"tracking current strategy"
+          "name":"tracking current strategy",
+          "description":"?"
         },
         {
-          "name":"tracking alternative strategies"
+          "name":"tracking alternative strategies",
+          "description":"?"
         }
     ]
   }
@@ -222,9 +275,9 @@ const tradingControlsAndSatistics = {
 }
 
 const implementationFeatures = [
-  oracle,
-  strategyControlsAndSatistics,
-  tradingControlsAndSatistics
+    oracle,
+    strategyControlsAndSatistics,
+    tradingControlsAndSatistics
 ]
 
 const exisitngToolProblems = {
@@ -232,12 +285,13 @@ const exisitngToolProblems = {
   "description":
   "IN ORDER TO not fall into a trap of loosing focus \n" +
   "AND not to re-invent exisitng tools \n" +
-  "AND to denote possible threats and weaknessess" +
+  "AND to denote possible threats and weaknessess \n" +
   "AS A developer \n" +
-  "I NEED TO analyze and store existing tool|s problems\n" +
+  "I NEED TO \n" +
+  " - analyze and store existing tool|s problems\n" +
   " - no embedded strategy managers \n" +
   " - trading buttons only \n",
-  children:[...implementationFeatures]
+  "children":[...implementationFeatures]
 }
 const deliveries = {
   "name":"deliveries",
@@ -276,7 +330,6 @@ const LinksTree = () => {
           ]
         }
         let data = businessObjective
-
 
         const root = d3.hierarchy(data);
 
@@ -347,6 +400,10 @@ const LinksTree = () => {
                   : "#999")
           )
          .attr("r", 8)
+
+         // node.append("text")
+         // .attr("fill", "green")
+         // .text("rrrr")
 
          const title = (d, n) => `${n.ancestors().reverse().map(d => d.data.name).join(".")}` // hover text
          if(title != null){

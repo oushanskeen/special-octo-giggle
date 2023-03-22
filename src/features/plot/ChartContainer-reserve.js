@@ -344,9 +344,7 @@ const ChartContainer = () => {
     const [render,setRender] = useState(0)
     const [state, setState] = useState({
       render: 0,
-      data:  prepareData(makeData(),2,4),
-      smaOne: 4,
-      smaTwo: 8
+      data:  prepareData(makeData(),2,4)
     })
 
     // setup sma io handles
@@ -367,25 +365,21 @@ const ChartContainer = () => {
       // console.log("M: (ChartContainer) data change: ", JSON.stringify(data) == JSON.stringify(newData))
     }
     const handleSmaTwoChange = (event) => {
-      setState({
-        ...state,
-        smaTwo: +event.target.value
-      })
+      setSmaTwo(+event.target.value)
+      setRender(render++)
     }
 
-    data.length  == 0 && setData(prepareData(makeData(),state.smaOne,state.smaTwo))
+    data.length  == 0 && setData(prepareData(makeData(),smaOne,smaTwo))
 
     useEffect(() => {
+      console.log("M: (ChartContainer) data change: ", data)
       // setData(prepareData(makeData(),smaOne,smaTwo))
       setState({
         ...state,
-        render: state.render += 1,
-        data: prepareData(makeData(),state.smaOne,state.smaTwo)
+        render: state.render++,
+        data: prepareData(makeData(),smaOne,smaTwo)
       })
-      console.log("M: (ChartContainer) data change: ", state)
-      console.log("M: (ChartContainer) data change raw: ", state.data.filter(e => e.group == "sma4").slice(-10))
-
-    },[state.smaOne,state.smaTwo])
+    },[state.smaOne])
 
     // <SMAmulti inputData={prepareData(data, 4, 8)} name="multiDataChart" smaOneIn={4} smaTwoIn={8}/>
     // <SMAmulti inputData={data.filter(e => e.group == "sma4")} name="multiSMAchartSma4Data" smaOneIn={4} smaTwoIn={8}/>
@@ -394,19 +388,20 @@ const ChartContainer = () => {
     // <span class="module"></span>
     // </span>
 
+    // <SMAmulti inputData={data.filter(e => e.group == "dirs" || e.group == "dirZero" || e.group == "cumsum" || e.group == "dots")} name="multiSMAchartTrendVolumes" smaOneIn={4} smaTwoIn={8}/>
+    // <SMAmulti inputData={data.filter(e => e.group == "balance" || e.group == "profit")} name="multiSMAchartBalance" smaOneIn={4} smaTwoIn={8}/>
     return (
         <div class="module">
               <SMAmulti inputData={state.data.filter(e => e.group == "rawData" || e.group == "sma4" || e.group == "sma8" || e.group == "dots")} name="multiSMAchartPrices"/>
-              <SMAmulti inputData={state.data.filter(e => e.group == "dirs" || e.group == "dirZero" || e.group == "cumsum" || e.group == "dots")} name="multiSMAchartTrendVolumes" smaOneIn={4} smaTwoIn={8}/>
-              <SMAmulti inputData={state.data.filter(e => e.group == "balance" || e.group == "profit")} name="multiSMAchartBalance" smaOneIn={4} smaTwoIn={8}/>
+              <div>{state.render}</div>
               <span class="module box" style={{"justifyContent":"spaceBetween"}}>
                 <div>{state.smaOne}</div>
                 <div> : </div>
-                <div>{state.smaTwo}</div>
+                <div>{smaTwo}</div>
               </span>
               <span class="module box">
                 <input type="range" class="slider" min="0" max="10" step="1" value={state.smaOne} onChange={handleSmaOneChange}/>
-                <input type="range" class="slider" min="0" max="10" step="1" value={state.smaTwo} onChange={handleSmaTwoChange}/>
+                <input type="range" class="slider" min="0" max="10" step="1" value={smaTwo} onChange={handleSmaTwoChange}/>
               </span>
         </div>
     )

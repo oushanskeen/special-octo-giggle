@@ -3,37 +3,39 @@ import * as d3 from "d3"
 
 const SMAmulti = ({inputData,tx,ty, name,color, smaOneIn, smaTwoIn}) => {
 
-  // console.log("M: (SMAmulti) input data: ", inputData)
+  console.log("M: (SMAmulti) input data: ", inputData)
 
   const width = window.innerWidth
-  const height = (2/3)*window.innerHeight
+  const height = (1/5)*window.innerHeight
   const ref = useRef()
   // console.log("ref: ", ref)
 
   // setup sma io handles
-  const [smaOne, setSmaOne] = useState(smaOneIn)
-  const [smaTwo, setSmaTwo] = useState(smaTwoIn)
-  const handleSmaOneChange = (event) => {
-    setSmaOne(+event.target.value)
-  }
-  const handleSmaTwoChange = (event) => {
-    setSmaTwo(+event.target.value)
-  }
-  let [data,setData] = useState([])
+  // const [smaOne, setSmaOne] = useState(smaOneIn)
+  // const [smaTwo, setSmaTwo] = useState(smaTwoIn)
+  // const handleSmaOneChange = (event) => {
+  //   setSmaOne(+event.target.value)
+  // }
+  // const handleSmaTwoChange = (event) => {
+  //   setSmaTwo(+event.target.value)
+  // }
+  // let [data,setData] = useState(inputData.filter(e => e.group != "dots"))
+  let [data,setData] = useState(inputData)
   let [pointId,setPointId] = useState(0)
 
-  console.log("M: (SMAmulti) processed data: ", data)
-  data.length == 0 && setData(inputData.filter(e => e.group != "dots"))
+  const EDGES = inputData.filter(e => e.group == "dots")
+  inputData = inputData.filter(e => e.group != "dots")
+  console.log("M: (SMAmulti) processed data: ", inputData.filter(e => e.group == "sma4").slice(-10))
+  // data.length == 0 && setData(inputData.filter(e => e.group != "dots"))
 
   useEffect(() => {
 
     // Compute data
     // setData()
     // console.log("M: (SMAmulti) before grouping: ", data)
-    const X = data.map((e) => e.date * 10)
-    const Y = data.map((e) => e.value)
-    const Z = data.map((e) => e.group)
-    const EDGES = inputData.filter(e => e.group == "dots")
+    const X = inputData.map((e) => e.date * 10)
+    const Y = inputData.map((e) => e.value)
+    const Z = inputData.map((e) => e.group)
     // console.log("M: (SMAmulti) X: ", X)
     // console.log("M: (SMAmulti) Y: ", Y)
     // console.log("M: (SMAmulti) Z: ", Z)
@@ -143,9 +145,9 @@ const SMAmulti = ({inputData,tx,ty, name,color, smaOneIn, smaTwoIn}) => {
 
         svg.append("g")
         .selectAll("circle")
-        .data(EDGES)
+        .data(inputData)
         .join("circle")
-        .attr("r", 2.5)
+        .attr("r", 2)
         .attr("cx", (d,i) => xScale(i * 10))
         .attr("cy", (d) => yScale(200))
         .attr("fill",(d) => {
@@ -157,7 +159,7 @@ const SMAmulti = ({inputData,tx,ty, name,color, smaOneIn, smaTwoIn}) => {
         })
         .attr("opacity",(d) => {
           if(d.value !== 0 ){
-            return 0.7
+            return 0.5
           }else{
             return 0
           }
@@ -168,13 +170,15 @@ const SMAmulti = ({inputData,tx,ty, name,color, smaOneIn, smaTwoIn}) => {
           // .attr("stroke-opacity", 0.75)
           .selectAll("priceDot")
           // .data(d3.group(I, i => Z[i]))
-          .data(data.filter(e => e.group == "rawData"))
+          // .data(data.filter(e => e.group == "rawData"))
+          .data(inputData.filter(e => e.group == "rawData"))
           .join("circle")
           .attr("fill",
           // "grey"
           (d,i) => {
             // console.log("M: (dot drawing) Z data: ", d, i)
-            let signs = inputData.filter(e => e.group == "dots")
+            // let signs = inputData.filter(e => e.group == "dots")
+            let signs = EDGES
             // console.log("M: (dot drawing) signs data: ", signs)
             if(signs.length > 0){
               if(signs[i].value < 0){
@@ -205,9 +209,16 @@ const SMAmulti = ({inputData,tx,ty, name,color, smaOneIn, smaTwoIn}) => {
           //   }
           }
           )
-          .attr("r", 1)
+          .attr("r", 2)
           .attr("cx", (d) => xScale(d.date * 10))
           .attr("cy", (d) => yScale(d.value))
+          // .attr("opacity",(d) => {
+          //   if(d.value !== 0 ){
+          //     return 0.7
+          //   }else{
+          //     return 0
+          //   }
+          // })
           // .attr("fill","grey")
           // .call((d,i) => {
           //   console.log("M: (dot drawing) data: ", d, i)
@@ -320,7 +331,7 @@ const SMAmulti = ({inputData,tx,ty, name,color, smaOneIn, smaTwoIn}) => {
           tooltipDiv.attr("display", "none")
         }
 
-  },[ data,inputData, smaOne, smaTwo ])
+  },[inputData,data])
 
   // <div>{data.filter(e => e.date == (pointId%(data.length)))}</div>
   return (
@@ -332,6 +343,17 @@ const SMAmulti = ({inputData,tx,ty, name,color, smaOneIn, smaTwoIn}) => {
         }
         </div>
         <div ref={ref} class={name}/>
+        {
+          // <>
+          //   <div>{JSON.stringify(inputData.slice(-5))}</div>
+          //   <div>{JSON.stringify(data.slice(-5))}</div>
+          //   <div>{JSON.stringify(data.filter(e => e.group == "rawData").slice(-5))}</div>
+          //   <div>{JSON.stringify(data.filter(e => e.group == "sma4").slice(-5))}</div>
+          //   <div>{JSON.stringify(data.filter(e => e.group == "sma8").slice(-5))}</div>
+          //   <div>{JSON.stringify(data.filter(e => e.group == "dirs").slice(-5))}</div>
+          //   <div>{JSON.stringify(data.filter(e => e.group == "dots").slice(-5))}</div>
+          // </>
+        }
       </>
   )
 }

@@ -4,14 +4,22 @@ import profitFromBalance from "./profitFromBalance"
 
 const prepareData = (data,smaOne,smaTwo,xScale,yScale) => {
 
-    console.log("M: (prepareData) input data: ", data)
+    console.log( `
+      M: (prepareData)
+
+      input data: ${data}
+      smaOne: ${smaOne}
+      smaTwo: ${smaTwo}
+
+    `)
 
     let rawData = data.map((e,i) => ({date:i,value:e.buyWeight}))
     const sma4Data = sma(data.map(e => e.buyWeight), smaOne).map((e,i) => ({date:i,value:e}))
     for(let i = 0; i < smaOne; i++){
       sma4Data[i].value = rawData[i].value
     }
-    // console.log("M: (prepareData) sma4Data: ", sma4Data)
+    console.log("M: (prepareData) sma4Data smaOne: ", smaOne)
+    console.log("M: (prepareData) sma4Data: ", sma4Data.slice(0,10))
     const sma8Data = sma(data.map(e => e.buyWeight), smaTwo).map((e,i) => ({date:i,value:e}))
     for(let i = 0; i < smaTwo; i++){
       sma8Data[i].value = rawData[i].value
@@ -248,7 +256,10 @@ const prepareData = (data,smaOne,smaTwo,xScale,yScale) => {
       .map((g,i) => g.map(record => ({...record,group:map[i]})))
       .flatMap(e => e)
 
-    console.log("M: (prepareData) accumulated data: ", accumulatedData)
+    console.log(`
+      M: (prepareData)
+      accumulated data: ${accumulatedData}
+      `)
 
     return accumulatedData
 

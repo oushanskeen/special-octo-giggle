@@ -135,11 +135,14 @@ export default function TimeSeriesRibbon(){
     <div style={{background: "lightGrey"}} class="timeSeriesRibbon">
     {
       <>
-          <svg class="chart SVG" ref={ref} width="800" height="800" />
-          <div>
-              <h3>data</h3>
-              <div>{JSON.stringify(data)}</div>
-          </div>
+          <svg class="chart SVG" ref={ref} width="800" height="700" />
+          {
+            // <div>
+            // <h3>data</h3>
+            // <div>{JSON.stringify(data)}</div>
+            // </div>
+
+          }
       </>
     }
     </div>);

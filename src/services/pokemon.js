@@ -59,7 +59,15 @@ export const pokemonApi = createApi({
     }),
     getTokenCandles: builder.query({
       query: (token) => {
-        return `v1/tradingview/history?symbol=${token}-eth_USD&resolution=240&from=1672731580&to=1677339580`
+        return `v1/tradingview/history?symbol=${token}-eth_USD&resolution=240&from=1677407666&to=1677983666`
+        // v1/tradingview/history?symbol=0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2-eth_USD-indicators&resolution=60&from=1676903524&to=1677983524
+      },
+    }),
+    getTokenCandlesTimeBound: builder.query({
+      query: ({token,network,start,end,resolution}) => {
+        console.log("START END: ", token, network,start, end)
+        return `v1/tradingview/history?symbol=${token}-${network}_USD&resolution=${resolution}&from=${start}&to=${end}`
+        // v1/tradingview/history?symbol=0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2-eth_USD-indicators&resolution=60&from=1676903524&to=1677983524
       },
     }),
     patchStrategy: builder.mutation({
@@ -118,4 +126,4 @@ export const pokemonApi = createApi({
     }),
   }),
 })
-export const { useGetPokemonByNameQuery, useGetTokenByNameQuery, useGetAllStrategiesQuery, useGetTokenCandlesQuery, usePatchStrategyMutation, useDeleteStrategyMutation } = pokemonApi
+export const { useGetPokemonByNameQuery, useGetTokenByNameQuery, useGetAllStrategiesQuery, useGetTokenCandlesQuery, usePatchStrategyMutation, useDeleteStrategyMutation, useGetTokenCandlesTimeBoundQuery } = pokemonApi

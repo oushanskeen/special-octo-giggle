@@ -36,6 +36,13 @@ const SMAmulti = ({inputData,tx,ty, name,color, smaOneIn, smaTwoIn}) => {
     const X = inputData.map((e) => e.date * 10)
     const Y = inputData.map((e) => e.value)
     const Z = inputData.map((e) => e.group)
+    const Yo = inputData.filter(e => e.group == "balance").map((e) => e.start)
+    const Yc = inputData.filter(e => e.group == "balance").map((e) => e.value)
+    console.log("BALANCE: ", inputData.filter(e => e.group == "balance"))
+    console.log("BALANCE Yo: ", inputData.filter(e => e.group == "balance"))
+    console.log("BALANCE: ", inputData.filter(e => e.group == "balance"))
+
+
     // console.log("M: (SMAmulti) X: ", X)
     // console.log("M: (SMAmulti) Y: ", Y)
     // console.log("M: (SMAmulti) Z: ", Z)
@@ -59,6 +66,7 @@ const SMAmulti = ({inputData,tx,ty, name,color, smaOneIn, smaTwoIn}) => {
 
     // Construct scales and axes
     const xScale = xType(xDomain, xRange);
+    const xBandScale = d3.scaleBand(xDomain, xRange).padding(0.2);
     const yScale = yType(yDomain, yRange);
     // const xAxis = d3.axisBottom(xScale).ticks(width / 80).tickSizeOuter(0);
     // const yAxis = d3.axisLeft(yScale).ticks(height / 60);
@@ -98,6 +106,7 @@ const SMAmulti = ({inputData,tx,ty, name,color, smaOneIn, smaTwoIn}) => {
       .append("span")
       .attr("class","tooltip")
 
+      if(name != "multiSMAchartBalances"){
 
     const path = svg.append("g")
       .attr("fill", "none")
@@ -147,7 +156,7 @@ const SMAmulti = ({inputData,tx,ty, name,color, smaOneIn, smaTwoIn}) => {
         .selectAll("circle")
         .data(inputData)
         .join("circle")
-        .attr("r", 2)
+        .attr("r", 0.5)
         .attr("cx", (d,i) => xScale(i * 10))
         .attr("cy", (d) => yScale(200))
         .attr("fill",(d) => {
@@ -164,6 +173,9 @@ const SMAmulti = ({inputData,tx,ty, name,color, smaOneIn, smaTwoIn}) => {
             return 0
           }
         })
+
+
+
         const priceDots = svg.append("g")
           // .attr("fill", "none")
           // .attr("stroke", "steelblue")
@@ -191,38 +203,172 @@ const SMAmulti = ({inputData,tx,ty, name,color, smaOneIn, smaTwoIn}) => {
             }else{
               return "grey"
             }
-
-          //   switch(d[0]){
-          //     case "rawData":
-          //       return "grey"
-          //     case "sma4":
-          //       return "green"
-          //     case "sma8":
-          //       return "blue"
-          //     case "cumsum":
-          //       return "streetblue"
-          //     case "dirs":
-          //     case "dirZero":
-          //       return "saramacgreen"
-          //     default:
-          //       return "red"
-          //   }
           }
           )
-          .attr("r", 2)
+          .attr("r", 1)
           .attr("cx", (d) => xScale(d.date * 10))
           .attr("cy", (d) => yScale(d.value))
-          // .attr("opacity",(d) => {
-          //   if(d.value !== 0 ){
-          //     return 0.7
-          //   }else{
-          //     return 0
-          //   }
-          // })
-          // .attr("fill","grey")
-          // .call((d,i) => {
-          //   console.log("M: (dot drawing) data: ", d, i)
-          // })
+
+        }
+          const OPENS = inputData.filter(e => e.group == "balance").map(e => e.start)
+          // try{
+          // if (OPENS.length > 0){
+            console.log("OPENS: ", OPENS)
+            console.log("OPENS length: ", OPENS.length)
+            console.log("OPENS extent: ", d3.range(OPENS))
+
+          const priceBars = svg.append("g")
+            .selectAll("priceBar")
+            .data(OPENS)
+            // .attr("stroke-opacity", 0.75)
+            // .data(d3.group(I, i => Z[i]))
+            // .data(data.filter(e => e.group == "rawData"))
+            // .data(inputData.filter(e => e.group == "rawData"))
+            .join("line")
+            .attr("fill","red")
+            .attr("x1",(d,i) => xScale(i*10))
+            .attr("x2",(d,i) => xScale(i*10))
+            .attr("y1",(d,i) => {
+            //   console.log("OPEN[i]: for i: ", i, OPENS[i])
+              return yScale(d)}
+            )
+            .attr("y2",(d) => yScale(d + 10))
+            .attr("stroke-width",5)
+            .attr("stroke", "steelblue")
+          // }catch{
+          //
+          // }
+        // }
+
+            // "grey"
+            // (d,i) => {
+            //   // console.log("M: (dot drawing) Z data: ", d, i)
+            //   // let signs = inputData.filter(e => e.group == "dots")
+            //   let signs = EDGES
+            //   // console.log("M: (dot drawing) signs data: ", signs)
+            //   if(signs.length > 0){
+            //     if(signs[i].value < 0){
+            //       return "red"
+            //     }else if(signs[i].value > 0){
+            //       return "green"
+            //     }else{
+            //         return "grey"
+            //     }
+            //   }else{
+            //     return "grey"
+            //   }
+            // }
+            // )
+            // .attr("r", 1)
+            // .attr("cx", (d) => xScale(d.date * 10))
+            // .attr("cy", (d) => yScale(d.value))
+
+          if(name == "multiSMAchartBalances"){
+
+            svg.append("g")
+            .selectAll("priceBar2")
+            .data(inputData.filter(e => e.group == "balance"))
+            .join("line")
+            .attr("stroke", "grey")
+            .attr("stroke-width", 0.01)
+            .attr("x1", xScale(0))
+            .attr("x2", window.innerWidth)
+            .attr("y1", yScale(inputData.filter(e => e.group == "balance")[0].value))
+            .attr("y2", yScale(inputData.filter(e => e.group == "balance")[0].value))
+            console.log("BALANCES: ", inputData.filter(e => e.group == "balance"))
+
+            // const path = svg.append("g")
+            //   .attr("fill", "none")
+            //   .attr("stroke", "steelblue")
+            //   .attr("stroke-opacity", 0.75)
+            //   .selectAll("path")
+            //   .data(d3.group(I, i => Z[i]))
+            //   .join("path")
+            //     .attr("stroke", (d,i) => {
+            //       // console.log("Z data: ", d[0], i)
+            //       switch(d[0]){
+            //         case "rawData":
+            //           return "grey"
+            //         case "sma4":
+            //           return "green"
+            //         case "sma8":
+            //           return "blue"
+            //         case "cumsum":
+            //           return "streetblue"
+            //         case "dirs":
+            //         case "dirZero":
+            //           return "saramacgreen"
+            //         case "dots":
+            //           return "grey"
+            //         case "profit":
+            //           return "green"
+            //         default:
+            //           return "red"
+            //       }
+            //     })
+            //     .attr("opacity", (d,i) => {
+            //       // console.log("Z data: ", d[0], i)
+            //       switch(d[0]){
+            //         case "dots":
+            //           return 0.2
+            //         case "rawData":
+            //           return 0.5
+            //         default:
+            //           return 1
+            //       }
+            //     })
+            //     .attr("d", ([, I]) => line(I))
+
+
+            const priceBars = svg.append("g")
+              // .attr("fill", "none")
+              // .attr("stroke", "steelblue")
+              // .attr("stroke-opacity", 0.75)
+              .selectAll("priceBar")
+              // .data(d3.group(I, i => Z[i]))
+              // .data(data.filter(e => e.group == "rawData"))
+              // .data(inputData.filter(e => e.group == "rawData"))
+              .data(inputData.filter(e => e.group == "balance"))
+              .join("line")
+              // .join("line")
+              .attr("stroke",
+              // "grey"
+              (d,i) => {
+                let signs = EDGES
+                if(signs.length > 0){
+                  if(signs[i].value < 0){
+                    return "red"
+                  }else if(signs[i].value > 0){
+                    return "green"
+                  }else{
+                      return "grey"
+                  }
+                }else{
+                  return "grey"
+                }
+              }
+              )
+              // .attr("stroke", "grey")
+              .attr("stroke-width", 1)
+              .attr("x1", (d,i) => xScale(i * 10))
+              .attr("x2", (d,i) => xScale(i * 10))
+              .attr("y1", (d) => {
+                if(d.start != 0){
+                  console.log("BAR d value:", d)
+                  console.log("BAR d value scaled:", yScale(d.start))
+                }
+                return yScale(d.start)
+              })
+              .attr("y2", (d) => {
+                if(d.start != 0){
+                  console.log("BAR d value:", d)
+                  console.log("BAR d value scaled:", yScale(d.value))
+                }
+                return yScale(d.value)
+              })
+              console.log("BALANCES: ", inputData.filter(e => e.group == "balance"))
+
+        }
 
         // add in5dex line
         const vs = svg
@@ -230,6 +376,47 @@ const SMAmulti = ({inputData,tx,ty, name,color, smaOneIn, smaTwoIn}) => {
           .attr("fill","none")
           .attr("stroke","grey")
           .attr("opacity",0.5)
+
+        // balance BARS
+
+        let colors = ["#4daf4a", "#999999", "#e41a1c"] // [up, no change, down]
+        svg.append("line")
+        .attr("y1", i => yScale(Yo[i]))
+        .attr("y2", i => yScale(Yc[i]))
+        .attr("stroke-width", xBandScale.bandwidth())
+        .attr("stroke", i => colors[1 + Math.sign(Yo[i] - Yc[i])]);
+
+        // const balanceBar = svg.append("g")
+        // .selectAll("balanceBar")
+        // .data(inputData.filter(e => e.group == "balance"))
+        // // .data(balanceBarData)
+        // .join("rect")
+        // .attr("class","balanceBar")
+        // .attr("fill",(d) => {
+        //   console.log("BALANCE data: ", d)
+        //   if(d.value > 0){
+        //     return "green"
+        //   }else if(d.value < 0){
+        //     return "red"
+        //   }else{
+        //     return "grey"
+        //   }
+        // })
+        // .attr("opacity",(d) => {
+        //   console.log("BALANCE data: ", d)
+        //   if(d.value == 0){
+        //     return 0
+        //   }else{
+        //     return 0.7
+        //   }
+        // })
+        // // .attr("y", (d) => yScale(d.value))
+        // .attr("y", (d) => yScale(d.start))
+        // .attr("x", (d,i) => xScale(i*10))
+        // .attr("width",2)
+        // .attr("height",(d) => yScale(d.value))
+
+
 
         // add title
 

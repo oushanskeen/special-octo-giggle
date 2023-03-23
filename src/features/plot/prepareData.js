@@ -133,24 +133,43 @@ const prepareData = (data,smaOne,smaTwo,xScale,yScale) => {
       )
       .map((e,i) => ({date:i,value:e}))
 
+    const priceApplicationChange = (() => {
+      let nonNull = dots.filter(e => e.value != 0)
+      let cumsum = [...nonNull.map(e => ({...e,value:e.value * -1}))]
+      console.log("M: (prepareData) priceApplicationChange cumsum input: ", cumsum)
+      for(let i = 0;i < cumsum.length; i++){
+        console.log("M: (prepareData) priceApplicationChange cumsum dot: ", cumsum[i])
+        if(i == 0){
+          cumsum[i].value = cumsum[i].value
+        }else{
+          cumsum[i].value = cumsum[i-1].value + cumsum[i].value
+        }
+      }
+      console.log("M: (prepareData) priceApplicationChange cumsum: ", cumsum)
+      return cumsum
+    })()
+      // [].slice.call(d3.cumsum(dots.filter(e => e.value != 0)))
+      // .map((e,i) => ({date:i,value:e}))
+
     const profit = profitFromBalance(balanceChange.map(e => e.value)).map((e,i) => ({date:i,value:e}))
 
     const balanceChangeLessLoss =
       [].slice.call(d3.cumsum(
         edgePrices.map((e,i) => {
-          let out = 0
-          // console.log("M: (balanceChange) PRICES: ", e)
-          if(e.value > 0){
-            out = -e.price
-            // console.log("M: (balanceChange) TTLEAVE with out: ", out)
-          }else if(e.value < 0){
-            out = e.price
-            // console.log("M: (balanceChange) TTENTER with out: ", out)
-          }else{
-            out = 0
-            // console.log("M: (balanceChange) TTSKIP with out: ", out)
-          }
-          return out
+          // let out = 0
+          // // console.log("M: (balanceChange) PRICES: ", e)
+          // if(e.value > 0){
+          //   out = -e.price
+          //   // console.log("M: (balanceChange) TTLEAVE with out: ", out)
+          // }else if(e.value < 0){
+          //   out = e.price
+          //   // console.log("M: (balanceChange) TTENTER with out: ", out)
+          // }else{
+          //   out = 0
+          //   // console.log("M: (balanceChange) TTSKIP with out: ", out)
+          // }
+          // return out
+          return e
         })
       )
       )
@@ -168,7 +187,50 @@ const prepareData = (data,smaOne,smaTwo,xScale,yScale) => {
     //       balance change: ${JSON.stringify(balanceChange)}
     //   `)
     //   // sum: ${balanceChange.reduce((sum,cur) => sum + cur,0)}
-    let accumulatedDots = balanceChange
+
+    // let accumulatedDots = balanceChange
+
+
+            let previousNonZeroHeight = 0
+            const balanceBarData = rawData.map((e,i) => {
+              if(i == 0){
+                previousNonZeroHeight = e.value
+                return {start: 0, value: e.value}
+              }else{
+                if(dots[i].value == 0){
+                  return {
+                    start: 0,
+                    value: 0
+                  }
+                }else{
+                  console.log("previousNonZeroHeight before: ", previousNonZeroHeight)
+                  let sign = 1
+                  if(dots[i].value < 0){
+                    sign = -1
+                  }else if(dots[i].value > 0){
+                    sign = 1
+                  }
+                  let out = {
+                    start: previousNonZeroHeight,
+                    value: e.value * sign
+                  }
+                  previousNonZeroHeight = out.value
+                  console.log("previousNonZeroHeight out: ", out)
+                  console.log("previousNonZeroHeight out: ", out.height)
+                  console.log("previousNonZeroHeight after: ", previousNonZeroHeight)
+                  return out
+                }
+              }
+            })
+
+            console.log("balanceBarData ", balanceBarData)
+            // console.log(`
+            //   EDGES: ${JSON.stringify(dots)}
+            //   dots: ${JSON.stringify(inputData)}
+              // `)
+
+    // let accumulatedDots = priceApplicationChange
+    let accumulatedDots = balanceBarData
     // // const profitDots = dots.filter(dot => dot.value > 0)
     // // const totalProfit = profitDots.reduce((sum,cur) => sum + cur.value,0)
     // // const percentOfProfitDots = profitDots.length / dots.filter(dot => dot.value != 0).length
@@ -184,9 +246,12 @@ const prepareData = (data,smaOne,smaTwo,xScale,yScale) => {
     // //   (averageLossPerTrade * percentOfLossDots)
     //
     const profitDots = edgePrices.filter(dot => dot.value > 0)
-    const totalProfit = profitDots.reduce((sum,cur) => sum + cur.price,0)
-    const percentOfProfitDots = profitDots.length / dots.filter(dot => dot.value != 0).length
     const lossDots = edgePrices.filter(dot => dot.value < 0)
+    const trades = priceApplicationChange
+    // profitDots.map((e,i) => lossDots[i] ? (e.value + lossDots[i].value) : e.value)
+    // const totalProfit = profitDots.reduce((sum,cur) => sum + cur.price,0)
+    const totalProfit = edgePrices.reduce((sum,cur) => sum + cur.price,0)
+    const percentOfProfitDots = profitDots.length / dots.filter(dot => dot.value != 0).length
     const totalLoss = lossDots.reduce((sum,cur) => sum - cur.price,0)
     const percentOfLossDots = lossDots.length / dots.filter(dot => dot.value != 0).length
     const outputProfit = totalProfit + totalLoss
@@ -196,13 +261,18 @@ const prepareData = (data,smaOne,smaTwo,xScale,yScale) => {
     const expectedLongtermGainlossValue =
       (averageGainPerTrade * percentOfProfitDots) +
       (averageLossPerTrade * percentOfLossDots)
-    //
-    console.log(`TRADE REPORT:
+
+    console.log("M: (prepareData) edgePrices ", edgePrices)
+    console.log("M: (prepareData) dots ", dots.filter(e => e.value != 0))
+
+    console.log(`M: (prepareData) TRADE REPORT:
       profitDots: ${profitDots.map(e => e.value)}
+      lossDots: ${lossDots.map(e => e.value)}
+      trades: ${trades.map(e => e.value)}
+
       totalProfit: ${totalProfit}
       percentOfProfitDots: ${percentOfProfitDots}
 
-      lossDots: ${lossDots.map(e => e.value)}
       totalLoss: ${totalLoss}
       percentOfLossDots: ${percentOfLossDots}
 

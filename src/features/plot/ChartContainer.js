@@ -393,12 +393,13 @@ const ChartContainer = () => {
     // <span class="module"></span>
     // <span class="module"></span>
     // </span>
+    // <SMAmulti inputData={state.data.filter(e => e.group == "balance" || e.group == "profit")} name="multiSMAchartBalance" smaOneIn={4} smaTwoIn={8}/>
 
     return (
         <div class="module">
               <SMAmulti inputData={state.data.filter(e => e.group == "rawData" || e.group == "sma4" || e.group == "sma8" || e.group == "dots")} name="multiSMAchartPrices"/>
               <SMAmulti inputData={state.data.filter(e => e.group == "dirs" || e.group == "dirZero" || e.group == "cumsum" || e.group == "dots")} name="multiSMAchartTrendVolumes" smaOneIn={4} smaTwoIn={8}/>
-              <SMAmulti inputData={state.data.filter(e => e.group == "balance" || e.group == "profit")} name="multiSMAchartBalance" smaOneIn={4} smaTwoIn={8}/>
+              <SMAmulti inputData={state.data.filter(e => e.group == "rawData" || e.group == "dots" || e.group == "balance")} name="multiSMAchartBalances"/>
               <span class="module box" style={{"justifyContent":"spaceBetween"}}>
                 <div>{state.smaOne}</div>
                 <div> : </div>

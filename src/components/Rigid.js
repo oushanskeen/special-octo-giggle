@@ -7,7 +7,7 @@ import { ResponsiveAreaBump } from '@nivo/bump'
 import TimeSeriesRibbon from '../features/charts/TimeSeriesRibbon'
 import LinksTree from '../features/charts/LinksTree'
 import SimpleLine from '../features/charts/SimpleLine'
-
+import CanvasPlayground from  "../features/canvas/CanvasPlayground"
 
 const Rigid = () => {
 
@@ -1705,6 +1705,7 @@ names = [...newNames];
       <Walker/>
       <SimpleAnimation/>
       <SimpleLine/>
+      <CanvasPlayground/>
     </>
   );
 }

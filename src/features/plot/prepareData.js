@@ -1,6 +1,7 @@
 import * as d3 from "d3"
 import sma from "./sma"
 import profitFromBalance from "./profitFromBalance"
+import smoother from "./smoother"
 
 const prepareData = (data,smaOne,smaTwo,xScale,yScale) => {
 
@@ -14,12 +15,22 @@ const prepareData = (data,smaOne,smaTwo,xScale,yScale) => {
     `)
 
     let rawData = data.map((e,i) => ({date:i,value:e.buyWeight}))
+
     const sma4Data = sma(data.map(e => e.buyWeight), smaOne).map((e,i) => ({date:i,value:e}))
     for(let i = 0; i < smaOne; i++){
       sma4Data[i].value = rawData[i].value
     }
     console.log("M: (prepareData) sma4Data smaOne: ", smaOne)
     console.log("M: (prepareData) sma4Data: ", sma4Data.slice(0,10))
+
+    const smoothSma4Data =
+        smoother(
+          sma(data.map(e => e.buyWeight), smaOne)
+        ).map((e,i) => ({date:i,value:e}))
+        for(let i = 0; i < smaOne; i++){
+          smoothSma4Data[i].value = rawData[i].value
+        }
+
     const sma8Data = sma(data.map(e => e.buyWeight), smaTwo).map((e,i) => ({date:i,value:e}))
     for(let i = 0; i < smaTwo; i++){
       sma8Data[i].value = rawData[i].value
@@ -41,7 +52,7 @@ const prepareData = (data,smaOne,smaTwo,xScale,yScale) => {
     //
     // // const dots = dirs.map(e => e.value)
     const dots = ((pool,stopLossValue=0) => {
-        // console.log("M: (dots) input pool length", pool.length)
+        console.log("M: (dots) input pool length", pool.length)
         let acc = []
         const min = data.sort((a,b) => a - b)[data.length/2].buyWeight
         for(let i = 0;i < pool.length; i++){
@@ -300,6 +311,7 @@ const prepareData = (data,smaOne,smaTwo,xScale,yScale) => {
     const map = [
       "rawData",
       "sma4",
+      "smoothSma4Data",
       "sma8",
       "dirs",
       "dirZero",
@@ -315,6 +327,7 @@ const prepareData = (data,smaOne,smaTwo,xScale,yScale) => {
     const accumulatedData = [
       rawData,
       sma4Data,
+      smoothSma4Data,
       sma8Data,
       dirs,
       dirZero,

@@ -1,0 +1,23 @@
+// draw trading data -----------------------------------------------------------
+
+    - S: User.seesTokenCandlesData // user sees raw candles data
+    - M: Plot/plotSlice/prepareData()... // Plot.js dispatches an action to count trade progress data
+    ? D: prepareData :: TokenData -> sma2Data && // PrepareData module counts sma 2 data
+    ? D: prepareData :: TokenData -> sma4Data && // PrepareData module counts sma 4 data
+    ? D: prepareData :: sma2Data -> sma4Data -> tradePointsData >> // PrepareData modules count trading points data
+    - R: Plot/plotSlice :: (sma2Data, sma4Data, tradePointsData) -> state >> // Plot.js dispatches an action to save trading progress data in state
+    - Q: Plot :: state -> (sma2Data, sma4Data, tradePointsData) >> // Plot.js retrieves trading progress data from the state
+    - V: Plot/SMAMulti :: (sma2Data, sma4Data, tradePointsData) -> Viz // Plot.js asks SMAMulti to draw chart for trading progress
+    - :: SMAMulti -> ...data ->
+        <>
+    		  sma2IO data=[{group,value,date}=sma2Data]
+    	    sma4IO data=[{group,value,date}=sma4Data]
+     		  tradePointsIO = data=[{group,value,date}=tradePointsData]
+     	  </>
+      ...-> S: User.seesTokenTradingProgressData
+
+// draw trading results progress -----------------------------------------------
+
+
+
+// -----------------------------------------------------------------------------

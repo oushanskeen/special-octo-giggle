@@ -1,5 +1,6 @@
 import React from "react"
 import {useEffect, useRef, useState, useContext, createContext } from "react"
+import { useSelector, useDispatch } from 'react-redux'
 import * as d3 from "d3"
 import sma from "./sma"
 import SimpleSMA from "./SimpleSMA"
@@ -17,6 +18,14 @@ import WeightFrequencySpreadTimeTracked from "./WeightFrequencySpreadTimeTracked
 import prepareData from "./prepareData"
 import SMAmulti from "./SMAmulti"
 import SMAstrategy from "./SMAstrategy"
+
+import {
+  getTokenTradingData
+} from '../plot/plotSlice'
+
+import {
+  useGetTokenCandlesQuery
+} from '../../services/pokemon'
 
 const width = 700
 const height = 200
@@ -378,9 +387,20 @@ console.log("M: [Randomly selected indices] gains average: ", gains.reduce((sum,
 console.log("M: [Randomly selected indices] gains mean: ", gains[Math.round(gains.length/2)])
 
 
-
-
 const Plots = () => {
+
+    const { refetch, data:d, error, isLoading, isFetching } = useGetTokenCandlesQuery()
+
+    // const dispatch = useDispatch()
+    // // TODO: add token trading data by
+    // const fetchTokenTradingData = () => {
+    //     dispatch(fetchTokenTradingData())
+    // }
+    // const perspectiveTokensFetchStatus = useSelector(state => state.plot.perspectiveTokensFetchStatus)
+    // useEffect(() => {
+    //   perspectiveTokensFetchStatus === 'idle'
+    //   && fetchTokenTradingData()
+    // }, [perspectiveTokensFetchStatus, dispatch])
 
     const [data,setData] = useState([])
     const [render,setRender] = useState(0)
@@ -437,124 +457,52 @@ const Plots = () => {
     // </span>
     // <SMAmulti inputData={state.data.filter(e => e.group == "balance" || e.group == "profit")} name="multiSMAchartBalance" smaOneIn={4} smaTwoIn={8}/>
 
-function QuickSortAnimation() {
 
-  const [data, setData] = useState([5, 2, 7, 3, 6, 1, 4]);
-
-  const width = 600;
-  const height = 400;
-  const margin = { top: 20, right: 20, bottom: 30, left: 40 };
-  const actualWidth = width - margin.left - margin.right;
-  const actualHeight = height - margin.top - margin.bottom;
-
-  const xScale = d3
-    .scaleBand()
-    .domain(d3.range(data.length))
-    .range([0, actualWidth])
-    .padding(0.1);
-
-  const yScale = d3
-    .scaleLinear()
-    .domain([0, d3.max(data)])
-    .range([actualHeight, 0]);
-
-  const partition = (start, end) => {
-    let pivotIndex = start;
-    const pivotValue = data[end];
-    for (let i = start; i < end; i++) {
-      if (data[i] < pivotValue) {
-        const temp = data[i];
-        data[i] = data[pivotIndex];
-        data[pivotIndex] = temp;
-        pivotIndex++;
-      }
+    const ArrayTimeLogger = (data,step) => {
+      // drawStatForStep(step)
+      return (
+        <>
+          <div>
+            {JSON.stringify([1,2,3,4,5])}
+          </div>
+        </>
+      )
     }
-    const temp = data[end];
-    data[end] = data[pivotIndex];
-    data[pivotIndex] = temp;
-    return pivotIndex;
-  };
 
-  const quickSort = (start, end) => {
-    if (start < end) {
-      const pivotIndex = partition(start, end);
-      quickSort(start, pivotIndex - 1);
-      quickSort(pivotIndex + 1, end);
-    }
-  };
-
-  const animateQuickSort = () => {
-    quickSort(0, data.length - 1);
-    const bars = d3.selectAll(".bar").data(data);
-
-    bars
-      .transition()
-      .duration(500)
-      .attr("x", (d, i) => xScale(i))
-      .attr("y", (d) => yScale(d))
-      .attr("height", (d) => actualHeight - yScale(d));
-
-    const labels = d3.selectAll(".label").data(data);
-
-    labels
-      .transition()
-      .duration(500)
-      .text((d) => d)
-      .attr("x", (d, i) => xScale(i) + xScale.bandwidth() / 2)
-      .attr("y", (d) => yScale(d) - 5)
-      .attr("text-anchor", "middle");
-
-  };
-
-  return (
-    <div>
-      <svg width={width} height={height}>
-        <g transform={`translate(${margin.left}, ${margin.top})`}>
-          {data.map((d, i) => (
-            <rect
-              key={i}
-              className="bar"
-              x={xScale(i)}
-              y={yScale(d)}
-              width={xScale.bandwidth()}
-              height={actualHeight - yScale(d)}
-            />
-          ))}
-          {data.map((d, i) => (
-            <text
-              key={i}
-              className="label"
-              x={xScale(i) + xScale.bandwidth() / 2}
-              y={yScale(d) - 5}
-              textAnchor="middle"
-            >
-              {d}
-            </text>
-          ))}
-        </g>
-      </svg>
-      <button onClick={animateQuickSort}>Sort</button>
-    </div>)
-  }
-
+    const inputPool = [... new Array(60).fill(0)]
 
     return (
         <div class="module">
             {
-              //
-              // <QuickSortAnimation/>
-              // <SMAmulti inputData={state.data.filter(e => e.group == "rawData" || e.group == "dots" || e.group == "balance")} name="multiSMAchartBalances"/>
-              // <SMAmulti inputData={state.data.filter(e => e.group == "rawData" || e.group == "sma4" || e.group == "sma8" || e.group == "dots")} name="multiSMAchartPrices"/>
-              // <SMAmulti inputData={state.data.filter(e => e.group == "dirs" || e.group == "dirZero" || e.group == "cumsum" || e.group == "dots")} name="multiSMAchartTrendVolumes" smaOneIn={4} smaTwoIn={8}/>
-              // <span class="module box" style={{"justifyContent":"spaceBetween"}}>
-              //   <div>{state.smaOne}</div>
-              //   <div> : </div>
-              //   <div>{state.smaTwo}</div>
-              // </span>
-              // <span class="module box">
-              //   <input type="range" class="slider" min="0" max="10" step="1" value={state.smaOne} onChange={handleSmaOneChange}/>
-              //   <input type="range" class="slider" min="0" max="10" step="1" value={state.smaTwo} onChange={handleSmaTwoChange}/>
-              // </span>
+              <>
+                <SMAanimated inputData={[... new Array(60).fill(0)]}/>
+                <ArrayTimeLogger/>
+              </>
+              // price chart with 2 SMAs
+              // trade progress chart
+              // trade progress chart
+              // <>
+              //  sma1 slider
+              //  sma2 slider
+              // </>
+
+              // array time loger
+            }
+            {
+              <>
+              <SMAmulti inputData={state.data.filter(e => e.group == "rawData" || e.group == "sma4" || e.group == "sma8" || e.group == "dots")} name="multiSMAchartPrices"/>
+              <SMAmulti inputData={state.data.filter(e => e.group == "rawData" || e.group == "dots" || e.group == "balance")} name="multiSMAchartBalances"/>
+              <SMAmulti inputData={state.data.filter(e => e.group == "dirs" || e.group == "dirZero" || e.group == "cumsum" || e.group == "dots")} name="multiSMAchartTrendVolumes" smaOneIn={4} smaTwoIn={8}/>
+              <span class="module box" style={{"justifyContent":"spaceBetween"}}>
+                <div>{state.smaOne}</div>
+                <div> : </div>
+                <div>{state.smaTwo}</div>
+              </span>
+              <span class="module box">
+                <input type="range" class="slider" min="0" max="10" step="1" value={state.smaOne} onChange={handleSmaOneChange}/>
+                <input type="range" class="slider" min="0" max="10" step="1" value={state.smaTwo} onChange={handleSmaTwoChange}/>
+              </span>
+              </>
             }
         </div>
     )

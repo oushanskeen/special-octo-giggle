@@ -1,5 +1,5 @@
 import CandlesBar from "./components/CandlesBar";
-import ChartContainer from "./features/plot/ChartContainer";
+import Plots from "./features/plot/Plots";
 import CandlesBarSimple from "./components/CandlesBarSimple";
 import PerspectiveTokens from "./components/PerspectiveTokens";
 import BestPractices from "./features/knowledge/BestPractices"
@@ -46,7 +46,7 @@ function App() {
                   <Route path="/special-octo-giggle/d3" element={ <Rigid/> } />
                   <Route path="/special-octo-giggle/pure" element={ <TradingGame/> } />
                   <Route path="/special-octo-giggle/old" element={ <CandlesBar data={data2} mapping={mapping}/> } />
-                  <Route path="/special-octo-giggle/plots" element={ <ChartContainer data={data2} mapping={mapping}/> } />
+                  <Route path="/special-octo-giggle/plots" element={ <Plots data={data2} mapping={mapping}/> } />
                   <Route path="/special-octo-giggle/counter" element={ <Counter/> } />
                   <Route path="/special-octo-giggle/hooks" element={ <Hooks/> } />
                   <Route path="/special-octo-giggle/bp" element={ <BestPractices/> } />

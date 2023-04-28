@@ -36,7 +36,7 @@ class PrepareData {
       const firstNonNull = this.smaOneData?.find(e => e.value !== 0)?.value
       this.smaOverlapAreasDiff = this.smaOneData?.map((e,i) =>
           ({
-            value: (this.smaOneData[i].value == 0 || this.smaTwoData[i].value == 0) ? 0 : this.smaOneData[i].value - this.smaTwoData[i].value,
+            value: (this.smaOneData[i].value == 0 || this.smaTwoData[i].value == 0) ? 0.1 : this.smaOneData[i].value - this.smaTwoData[i].value,
             date: e.date,
             group: "smaOverlapAreasDiff"
           })
@@ -56,15 +56,27 @@ class PrepareData {
         const firstNonNull = pool.find(e => e.value !== 0)?.value
         let acc = []
         for(let i = 0;i < pool.length; i++){
+            // if(i == 0){
+            //     acc.push({value:firstNonNull,date:pool[i].date,group:"tradingDots"})
+            //     continue
+            // }else if(pool[i - 1].value <= 0 && pool[i].value > 0){
+            //     acc.push({value:pool[i].value,date:pool[i].date,group:"tradingDots"})
+            // }else if(pool[i - 1].value > 0 && pool[i].value < 0){
+            //     acc.push({value:pool[i].value,date:pool[i].date,group:"tradingDots"})
+            // }else{
+            //     acc.push({value:firstNonNull,date:pool[i].date,group:"tradingDots"})
+            // }
             if(i == 0){
-                acc.push({value:firstNonNull,date:pool[i].date,group:"tradingDots"})
+                acc.push({value:0.1,date:pool[i].date,group:"tradingDots"})
                 continue
             }else if(pool[i - 1].value <= 0 && pool[i].value > 0){
-                acc.push({value:pool[i].value,date:pool[i].date,group:"tradingDots"})
+                acc.push({value:1,date:pool[i].date,group:"tradingDots"})
+                // acc.push({value:1,date:pool[i].date,group:"tradingDots"})
             }else if(pool[i - 1].value > 0 && pool[i].value < 0){
-                acc.push({value:pool[i].value,date:pool[i].date,group:"tradingDots"})
+                acc.push({value:-1,date:pool[i].date,group:"tradingDots"})
+                // acc.push({value:-1,date:pool[i].date,group:"tradingDots"})
             }else{
-                acc.push({value:firstNonNull,date:pool[i].date,group:"tradingDots"})
+                acc.push({value:0.1,date:pool[i].date,group:"tradingDots"})
             }
         }
         this.tradingDots = acc

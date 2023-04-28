@@ -97,22 +97,19 @@ const Plots = () => {
             </div>
             {
                 !isLoading && tokenCandles && smaOneData && smaTwoData && tradingPoints &&
-                <SMAmulti name="1" inputData={
+                <SMAmulti name="smaOne_smaTwo_tokenCandles" inputData={
                   [...smaOneData, ...smaTwoData, ...tokenCandles]
-                  // [...smaOverlapAreasDiff]
                 }/>
             }
             {
                 !isLoading && tokenCandles && smaOneData && smaTwoData && tradingPoints &&
-                <SMAmulti name="2" inputData={
-                  // [...smaOneData, ...smaTwoData, ...tokenCandles, ...tradingPoints]
+                <SMAmulti name="smaOverlapAreasDiff" inputData={
                   [...smaOverlapAreasDiff]
                 }/>
             }
             {
                 !isLoading && tokenCandles && smaOneData && smaTwoData && tradingPoints &&
-                <SMAmulti name="3" inputData={
-                  // [...smaOneData, ...smaTwoData, ...tokenCandles, ...tradingPoints]
+                <SMAmulti name="tradingPoints" inputData={
                   [...tradingPoints]
                 }/>
             }

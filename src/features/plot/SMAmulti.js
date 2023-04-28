@@ -100,7 +100,7 @@ const SMAmulti = ({inputData, name}) => {
       .call(yAxis)
       .call(g => g.select(".domain").remove())
       .call(g => g.selectAll(".tick line").clone()
-           .attr("stroke-opacity", d => d === 0 ? 0.6 : 0.2)
+           .attr("stroke-opacity", d => d === 0 ? 0.4 : 0.2)
            .attr("x2", width - marginLeft - marginRight))
       .call(g => g.append("text")
           .attr("x", -marginLeft)
@@ -136,19 +136,19 @@ const SMAmulti = ({inputData, name}) => {
           .attr("text-anchor", "middle")
           .attr("y", -8);
 
-      const rule = svg.append("g");
-
-      rule.append("line")
-          .attr("y1", marginTop)
-          .attr("y2", height - marginBottom - 15)
-          .attr("stroke", "currentColor");
+      // const rule = svg.append("g");
+      //
+      // rule.append("line")
+      //     .attr("y1", marginTop)
+      //     .attr("y2", height - marginBottom - 15)
+      //     .attr("stroke", "currentColor");
 
       function pointermoved(event) {
       const [xm, ym] = d3.pointer(event);
       const i = d3.least(I, i => Math.hypot(xScale(X[i]) - xm, yScale(Y[i]) - ym)); // closest point
       path.style("stroke", ([z]) => Z[i] === z ? null : "#ddd").filter(([z]) => Z[i] === z).raise();
-      dot.attr("transform", `translate(${xScale(X[i])},${yScale(Y[i])})`);
-      if (T) dot.select("text").text(T[i]);
+      dot.attr("fill","grey").attr("transform", `translate(${xScale(X[i])},${yScale(Y[i])})`);
+      if (T) dot.select("text").attr("fill","mistyrose").text(T[i]);
       svg.property("value", O[i]).dispatch("input", {bubbles: true});
     }
 

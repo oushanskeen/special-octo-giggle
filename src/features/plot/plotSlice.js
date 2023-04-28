@@ -10,9 +10,10 @@ const initialState = {
   tradingPoints: [],
   smaOneData: [],
   smaTwoData: [],
-  tradePointsData: [],
+  // tradePoints: [],
   smaOneValue: 2,
   smaTwoValue: 4,
+  prepareDataInstance: {}
   // perspectiveTokensFetchStatus: "idle"
 }
 
@@ -59,10 +60,12 @@ const plotSlice = createSlice({
       // console.log("M: [plotSlice.js] storeTokenCandles(", state.tokenCandles, ")")
     },
     countTradingPoints: (state, action) => {
-      console.log("M: [plotSlice.js] countTradingPoints() input", action.payload)
+      // console.log("M: [plotSlice.js/countTradingPoints] input", state.prepareDataInstance.getTradingDots())
+      state.tradingPoints = state.prepareDataInstance.getTradingDots()
+      state.smaOverlapAreasDiff = state.prepareDataInstance.smaOverlapAreasDiff
+      console.log("M: [plotSlice.js/countTradingPoints] output ", state.tradingPoints)
     },
     countSMAData: (state, action) => {
-
       const prepareData = new PrepareData(
         action.payload.tokenCandles,
         action.payload.smaOneValue,
@@ -70,22 +73,12 @@ const plotSlice = createSlice({
       )
       state.smaOneData = prepareData.getSMAOne()
       state.smaTwoData = prepareData.getSMATwo()
-
-      // console.log("M: [plotSlice.js] countSMAData(", action.payload, ")")
-
-      // const sma4Data = sma(data.map(e => e.buyWeight), smaOne).map((e,i) => ({date:i,value:e}))
-      // for(let i = 0; i < smaOne; i++){
-      //   sma4Data[i].value = rawData[i].value
-      // }
-      // // console.log("M: (prepareData) sma4Data smaOne: ", smaOne)
-      // // console.log("M: (prepareData) sma4Data: ", sma4Data.slice(0,10))
-      //
-      // const sma8Data = sma(data.map(e => e.buyWeight), smaTwo).map((e,i) => ({date:i,value:e}))
-      // for(let i = 0; i < smaTwo; i++){
-      //   sma8Data[i].value = rawData[i].value
-      // }
-
+      state.prepareDataInstance = prepareData;
     },
+    // countTradePoints: (state, action) => {
+    //   state.tradingPoints = state;
+    //   console.log("M: [plotSlice/countTradePoints] state: ", state)
+    // },
     setSmaOneValue: (state, action) => {
         state.smaOneValue = action.payload
     },
@@ -119,5 +112,5 @@ const plotSlice = createSlice({
 // }
 
 // export const { setType, setName, setInterval, setGainInterval, setChain, setGainsThreshold, setSellThreshold, setSubInterval, savePerspectiveTokens, savePerspectiveToken, setStartBalance } = plotSlice.actions
-export const { getSMA, countTradingPoints, storeTokenCandles, countSMAData, setSmaOneValue, setSmaTwoValue } = plotSlice.actions
+export const { getSMA, countTradingPoints, storeTokenCandles, countSMAData, setSmaOneValue, setSmaTwoValue, countTradePoints } = plotSlice.actions
 export default plotSlice.reducer

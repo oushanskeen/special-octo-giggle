@@ -4,6 +4,7 @@ import profitFromBalance from "./profitFromBalance"
 import smoother from "./smoother"
 
 class PrepareData {
+
     constructor(inputData,smaScopeOne,smaScopeTwo){
         this.inputData = inputData
         this.smaScopeOne = smaScopeOne
@@ -12,24 +13,67 @@ class PrepareData {
 
     getSMAOne(){
         console.log("M: [PrepareData/getSMAOne] inputData: ", JSON.stringify(this.inputData?.slice(3,8)))
-        console.log("M: [PrepareData/getSMAOne] smaScopeOne: ", this.smaScopeOne)
-        this.getSMAOneData = this.inputData &&
+        // console.log("M: [PrepareData/getSMAOne] smaScopeOne: ", this.smaScopeOne)
+        this.smaOneData = this.inputData &&
         sma(this.inputData.map(e => e.value), this.smaScopeOne)
         .map((e,i) => ({date:this.inputData[i].date,value:e,group:"smaOne"}))
         console.log("M: [PrepareData/getSMAOne] ", this.getSMAOneData)
-        return this.getSMAOneData
+        return this.smaOneData
     }
 
     getSMATwo(){
         console.log("M: [PrepareData/getSMATwo] inputData: ", JSON.stringify(this.inputData?.slice(3,8)))
-        console.log("M: [PrepareData/getSMATwo] smaScopeOne: ", this.smaScopeTwo)
-        this.getSMATwoData = this.inputData &&
+        // console.log("M: [PrepareData/getSMATwo] smaScopeOne: ", this.smaScopeTwo)
+        this.smaTwoData = this.inputData &&
         sma(this.inputData.map(e => e.value), this.smaScopeTwo)
         .map((e,i) => ({date:this.inputData[i].date,value:e,group:"smaTwo"}))
         console.log("M: [PrepareData/getSMATwo] ", this.getSMATwoData)
-        return this.getSMATwoData
+        return this.smaTwoData
     }
 
+    #getSMAOverlapAreasDiff(){
+      console.log("M: [PrepareData/#getSMAOverlapAreasDiff] call");
+      const firstNonNull = this.smaOneData?.find(e => e.value !== 0)?.value
+      this.smaOverlapAreasDiff = this.smaOneData?.map((e,i) =>
+          ({
+            value: (this.smaOneData[i].value == 0 || this.smaTwoData[i].value == 0) ? 0 : this.smaOneData[i].value - this.smaTwoData[i].value,
+            date: e.date,
+            group: "smaOverlapAreasDiff"
+          })
+      )
+      // const firstNonNull = this.smaOverlapAreasDiff.find(e => e.value !== 0)?.value
+      // this.smaOverlapAreasDiff = this.smaOverlapAreasDiff.map(e => e.value == 0 ? ({...e,value:firstNonNull}) : e)
+      // .filter(e => e.value !== 0)
+      console.log("M: [PrepareData/#getSMAOverlapAreasDiff] this.smaOverlapAreasDiff: ", this.smaOverlapAreasDiff);
+    }
+
+    getTradingDots(){
+        console.log("M: [PrepareData/getTradingDots] call");
+        this.#getSMAOverlapAreasDiff()
+        this.smaOverlapAreasDiff && (() => {
+
+        const pool = this.smaOverlapAreasDiff
+        const firstNonNull = pool.find(e => e.value !== 0)?.value
+        let acc = []
+        for(let i = 0;i < pool.length; i++){
+            if(i == 0){
+                acc.push({value:firstNonNull,date:pool[i].date,group:"tradingDots"})
+                continue
+            }else if(pool[i - 1].value <= 0 && pool[i].value > 0){
+                acc.push({value:pool[i].value,date:pool[i].date,group:"tradingDots"})
+            }else if(pool[i - 1].value > 0 && pool[i].value < 0){
+                acc.push({value:pool[i].value,date:pool[i].date,group:"tradingDots"})
+            }else{
+                acc.push({value:firstNonNull,date:pool[i].date,group:"tradingDots"})
+            }
+        }
+        this.tradingDots = acc
+        // .filter(e => e.value !== 0)
+        console.log("M: [PrepareData/getTradingDots] tradingDots: ", this.tradingDots);
+        // return acc
+        })()
+        return this.tradingDots
+    }
 }
 
 // const prepareData = (data,smaOne,smaTwo,xScale,yScale) => {

@@ -2,12 +2,12 @@ import {useEffect, useRef, useState, useContext, createContext } from "react"
 import * as d3 from "d3"
 
 // const SMAmulti = ({inputData,tx,ty, name,color, smaOneIn, smaTwoIn}) => {
-const SMAmulti = ({inputData}) => {
+const SMAmulti = ({inputData, name}) => {
 
   console.log("M: [SMAmulti] input data: ", JSON.stringify(inputData.slice(10,17)))
 
   const width = window.innerWidth
-  const height = (1/2)*window.innerHeight
+  const height = (1/4)*window.innerHeight
   const marginLeft = 100
   const marginRight = 30
   const marginTop = 20
@@ -41,7 +41,7 @@ const SMAmulti = ({inputData}) => {
   useEffect(() => {
 
     // d3.selectAll(".SMAmulti > *").remove()
-    d3.selectAll("#SMAmulti > *").remove()
+    d3.selectAll("#SMAmulti_" + name + " > *").remove()
     // d3.selectAll("." + name + " > *").remove();
 
     inputData = inputData.filter(e => e.value !== 0)
@@ -99,6 +99,9 @@ const SMAmulti = ({inputData}) => {
       .attr("transform", `translate(${marginLeft},0)`)
       .call(yAxis)
       .call(g => g.select(".domain").remove())
+      .call(g => g.selectAll(".tick line").clone()
+           .attr("stroke-opacity", d => d === 0 ? 0.6 : 0.2)
+           .attr("x2", width - marginLeft - marginRight))
       .call(g => g.append("text")
           .attr("x", -marginLeft)
           .attr("y", 10)
@@ -132,6 +135,13 @@ const SMAmulti = ({inputData}) => {
           .attr("font-size", 10)
           .attr("text-anchor", "middle")
           .attr("y", -8);
+
+      const rule = svg.append("g");
+
+      rule.append("line")
+          .attr("y1", marginTop)
+          .attr("y2", height - marginBottom - 15)
+          .attr("stroke", "currentColor");
 
       function pointermoved(event) {
       const [xm, ym] = d3.pointer(event);
@@ -478,7 +488,7 @@ const SMAmulti = ({inputData}) => {
   return (
       <>
 
-          <div ref={ref} class="module" id="SMAmulti"/>
+          <div ref={ref} class="module" id={"SMAmulti_" + name}/>
 
         {
 

@@ -42,7 +42,8 @@ const Plots = () => {
     let smaTwoData = useSelector(state => state.plot.smaTwoData)
     let smaOneValue = useSelector(state => state.plot.smaOneValue)
     let smaTwoValue = useSelector(state => state.plot.smaTwoValue)
-    let tradePointsData = useSelector(state => state.plot.tradePointsData)
+    let tradingPoints = useSelector(state => state.plot.tradingPoints)
+    let smaOverlapAreasDiff = useSelector(state => state.plot.smaOverlapAreasDiff)
 
     useEffect(() => {
         console.log("S: [Plots.js] candles received: ", data)
@@ -56,6 +57,15 @@ const Plots = () => {
           smaTwoValue:smaTwoValue
         }))
     },[smaOneValue,smaTwoValue,tokenCandles])
+
+    useEffect(() => {
+        console.log("M: [Plot] useEffect(smaOneData,smaTwoData)")
+        dispatch(countTradingPoints())
+    },[smaOneData,smaTwoData])
+
+    useEffect(() => {
+        console.log("M: [Plot] useEffect(tradePoints) tradePoints: ", tradingPoints)
+    },[tradingPoints])
 
     // useEffect(() => {
     //     console.log("SMA DATA UPDATED TO: ", JSON.stringify(smaOneData.slice(3,7)))
@@ -81,14 +91,29 @@ const Plots = () => {
             <div id="Plot" class="module">
                 <h3>Plot.js</h3>
             </div>
-            <div id="smaVlalues" class="module">
+            <div id="smaValues" class="module">
               <span>{smaOneValue}</span>
               <span>{smaTwoValue}</span>
             </div>
             {
-                !isLoading && tokenCandles && smaOneData && smaTwoData &&
-                <SMAmulti inputData={
+                !isLoading && tokenCandles && smaOneData && smaTwoData && tradingPoints &&
+                <SMAmulti name="1" inputData={
                   [...smaOneData, ...smaTwoData, ...tokenCandles]
+                  // [...smaOverlapAreasDiff]
+                }/>
+            }
+            {
+                !isLoading && tokenCandles && smaOneData && smaTwoData && tradingPoints &&
+                <SMAmulti name="2" inputData={
+                  // [...smaOneData, ...smaTwoData, ...tokenCandles, ...tradingPoints]
+                  [...smaOverlapAreasDiff]
+                }/>
+            }
+            {
+                !isLoading && tokenCandles && smaOneData && smaTwoData && tradingPoints &&
+                <SMAmulti name="3" inputData={
+                  // [...smaOneData, ...smaTwoData, ...tokenCandles, ...tradingPoints]
+                  [...tradingPoints]
                 }/>
             }
             <SMASliders/>

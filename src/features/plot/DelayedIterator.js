@@ -8,13 +8,13 @@ import {
 import * as d3 from "d3"
 
 function* iterator(arr) {
-    for (let i = 0; i < arr.length; i++) {
+    for (let i = 0; i < arr.length - 1; i++) {
         for (let j = i; j < arr.length; j++){
           yield [arr[i],arr[j]]
         }
     }
 }
-const input = iterator([... new Array(50).fill(0).map((e,i) => i)])
+const input = iterator([... new Array(60).fill(0).map((e,i) => i)])
 
 const DelayedIterator = ({gen = input}) => {
 
@@ -39,7 +39,7 @@ const DelayedIterator = ({gen = input}) => {
   useEffect(() => {
       let timer
       play && (() => {
-          timer = setTimeout(() => setup(), 10)
+          timer = setTimeout(() => setup(), 100)
       })()
       return () => clearTimeout(timer)
   },[smaOneValue, smaTwoValue, play])

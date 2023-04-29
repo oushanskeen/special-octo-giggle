@@ -7,7 +7,7 @@ const SMAmulti = ({inputData, name}) => {
   console.log("M: [SMAmulti] input data: ", JSON.stringify(inputData.slice(10,17)))
 
   const width = window.innerWidth
-  const height = (1/4)*window.innerHeight
+  const height = (1/7)*window.innerHeight
   const marginLeft = 100
   const marginRight = 30
   const marginTop = 20

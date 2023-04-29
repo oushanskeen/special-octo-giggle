@@ -9,9 +9,13 @@ class PrepareData {
         this.inputData = inputData
         this.smaScopeOne = smaScopeOne
         this.smaScopeTwo = smaScopeTwo
+        this.medianTradeValues = []
+        this.medianTradeValuesCallCounter = 0
+        this.msgLog = []
     }
 
     getSMAOne(){
+        this.msgLog.push("getSMAOne")
         console.log("M: [PrepareData/getSMAOne] inputData: ", JSON.stringify(this.inputData?.slice(3,8)))
         // console.log("M: [PrepareData/getSMAOne] smaScopeOne: ", this.smaScopeOne)
         this.smaOneData = this.inputData &&
@@ -22,6 +26,7 @@ class PrepareData {
     }
 
     getSMATwo(){
+        this.msgLog.push("getSMATwo")
         console.log("M: [PrepareData/getSMATwo] inputData: ", JSON.stringify(this.inputData?.slice(3,8)))
         // console.log("M: [PrepareData/getSMATwo] smaScopeOne: ", this.smaScopeTwo)
         this.smaTwoData = this.inputData &&
@@ -32,6 +37,7 @@ class PrepareData {
     }
 
     #getSMAOverlapAreasDiff(){
+      this.msgLog.push("#getSMAOverlapAreasDiff")
       console.log("M: [PrepareData/#getSMAOverlapAreasDiff] call");
       const firstNonNull = this.smaOneData?.find(e => e.value !== 0)?.value
       this.smaOverlapAreasDiff = this.smaOneData?.map((e,i) =>
@@ -41,50 +47,77 @@ class PrepareData {
             group: "smaOverlapAreasDiff"
           })
       )
-      // const firstNonNull = this.smaOverlapAreasDiff.find(e => e.value !== 0)?.value
-      // this.smaOverlapAreasDiff = this.smaOverlapAreasDiff.map(e => e.value == 0 ? ({...e,value:firstNonNull}) : e)
-      // .filter(e => e.value !== 0)
       console.log("M: [PrepareData/#getSMAOverlapAreasDiff] this.smaOverlapAreasDiff: ", this.smaOverlapAreasDiff);
     }
 
     getTradingDots(){
+        this.msgLog.push("getTradingDots")
         console.log("M: [PrepareData/getTradingDots] call");
         this.#getSMAOverlapAreasDiff()
         this.smaOverlapAreasDiff && (() => {
 
         const pool = this.smaOverlapAreasDiff
         const firstNonNull = pool.find(e => e.value !== 0)?.value
-        let acc = []
+        let tradingDots = []
+        let tradeTriggerValues = []
         for(let i = 0;i < pool.length; i++){
-            // if(i == 0){
-            //     acc.push({value:firstNonNull,date:pool[i].date,group:"tradingDots"})
-            //     continue
-            // }else if(pool[i - 1].value <= 0 && pool[i].value > 0){
-            //     acc.push({value:pool[i].value,date:pool[i].date,group:"tradingDots"})
-            // }else if(pool[i - 1].value > 0 && pool[i].value < 0){
-            //     acc.push({value:pool[i].value,date:pool[i].date,group:"tradingDots"})
-            // }else{
-            //     acc.push({value:firstNonNull,date:pool[i].date,group:"tradingDots"})
-            // }
             if(i == 0){
-                acc.push({value:0.1,date:pool[i].date,group:"tradingDots"})
-                continue
+                tradingDots.push({value:0.1,date:pool[i].date,group:"tradingDots"})
+                tradeTriggerValues.push({value:0.1,date:pool[i].date,group:"tradeTriggerValues"})
             }else if(pool[i - 1].value <= 0 && pool[i].value > 0){
-                acc.push({value:1,date:pool[i].date,group:"tradingDots"})
-                // acc.push({value:1,date:pool[i].date,group:"tradingDots"})
+                tradingDots.push({value:1,date:pool[i].date,group:"tradingDots"})
+                tradeTriggerValues.push({value:this.inputData[i].value,date:pool[i].date,group:"tradeTriggerValues",action:"sell"})
             }else if(pool[i - 1].value > 0 && pool[i].value < 0){
-                acc.push({value:-1,date:pool[i].date,group:"tradingDots"})
-                // acc.push({value:-1,date:pool[i].date,group:"tradingDots"})
+                tradingDots.push({value:-1,date:pool[i].date,group:"tradingDots"})
+                tradeTriggerValues.push({value:this.inputData[i].value,date:pool[i].date,group:"tradeTriggerValues",action:"buy"})
             }else{
-                acc.push({value:0.1,date:pool[i].date,group:"tradingDots"})
+                tradingDots.push({value:0.1,date:pool[i].date,group:"tradingDots"})
+                tradeTriggerValues.push({value:0.1,date:pool[i].date,group:"tradeTriggerValues"})
             }
         }
-        this.tradingDots = acc
-        // .filter(e => e.value !== 0)
+        this.tradingDots = tradingDots
+        this.tradeTriggerValues = tradeTriggerValues
         console.log("M: [PrepareData/getTradingDots] tradingDots: ", this.tradingDots);
-        // return acc
         })()
-        return this.tradingDots
+        return [this.tradingDots,this.tradeTriggerValues]
+    }
+
+    // countMedianTradeValue(){
+    //     this.msgLog.push("countMedianTradeValue")
+    //     return []
+    // }
+
+    countMedianTradeValue(){
+        console.log("M: [PrepareData/countMedianTradevalue] msgLog before: ", this.msgLog);
+        this.msgLog.push("countMedianTradeValue")
+        console.log("M: [PrepareData/countMedianTradevalue] msgLog after: ", this.msgLog);
+        console.log("M: [PrepareData/countMedianTradevalue] medianTradeValues: ", this.medianTradeValues);
+        this.medianTradeValues = [...this.medianTradeValues, {value:1}]
+        // this.medianTradeValuesCallCounter++
+        // console.log("M: [PrepareData/countMedianTradevalue] call counter: ", this.medianTradeValuesCallCounter);
+        // // let some = [1]
+        // // console.log("M: [PrepareData/countMedianTradevalue] some: ",  some);
+        // console.log("M: [PrepareData/countMedianTradevalue] this.medianTradeValues: ",   this.medianTradeValues);
+        // return this.medianTradeValues
+    }
+
+    countTradeResults(){
+        this.msgLog.push("countTradeResults")
+        const cumulativeSum = (sum => value => sum += value)(0)
+        const extractedValues = this.tradeTriggerValues?.map(e => e.action == "buy" ? -e.value : e.value)
+        this.tradeResults = extractedValues?.map(cumulativeSum).map((e,i) => ({
+          value: e,
+          date: this.tradeTriggerValues[i].date,
+          group: "tradeResults",
+          action: this.tradeTriggerValues[i].action
+        }))
+
+        // this.#countMedianTradeValue()
+
+        this.medianTradeValuesCallCounter++
+        console.log("M: [PrepareData/countMedianTradevalue] call counter: ", this.medianTradeValuesCallCounter);
+
+        return this.tradeResults
     }
 }
 

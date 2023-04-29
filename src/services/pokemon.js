@@ -58,17 +58,18 @@ export const pokemonApi = createApi({
       providesTags: ['Post']
     }),
     getTokenCandles: builder.query({
-      query: (
+      query: ({
+        candleSize
        // token = "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2",
        // resolutionScope = "1",
        // resolutionDimension = "D",
        // start = "1656374400",
        // stop = "1682380800"
-      ) => {
-        console.log('M: [pokemon.js] getTokenCandles')
+     }) => {
+        console.log('M: [pokemon.js/getTokenCandles] ')
         // console.log('M: [pokemon.js] getTokenCandles: ' + `v1/tradingview/history?symbol=${token}-eth_USD&resolution=${resolutionScope}${resolutionDimension}&from=${start}&to=${stop}`)
         // return `v1/tradingview/history?symbol=${token}-eth_USD&resolution=${resolutionScope}${resolutionDimension}&from=${start}&to=${stop}`
-        return "v1/tradingview/history?symbol=0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2-eth_USD-indicators&resolution=60&from=1676903524&to=1677983524"
+        return "v1/tradingview/history?symbol=0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2-eth_USD-indicators&resolution=" + candleSize + "&from=1676903524&to=1677983524"
       },
     }),
     getTokenCandlesTimeBound: builder.query({

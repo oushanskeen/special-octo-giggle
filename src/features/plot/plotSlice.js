@@ -13,7 +13,13 @@ const initialState = {
   // tradePoints: [],
   smaOneValue: 2,
   smaTwoValue: 4,
-  prepareDataInstance: {}
+  prepareDataInstance: {},
+  tradeTriggerValues: [],
+  tradeResults: [],
+  medianTradeValues: [],
+  averageTradeValues: [],
+  msgLog: [],
+  candleSize: "5"
   // perspectiveTokensFetchStatus: "idle"
 }
 
@@ -40,6 +46,7 @@ const plotSlice = createSlice({
   initialState,
   reducers: {
     getSMA: (state, action) => {
+      state.msgLog.push("getSma")
       // console.log("M: [plotSlice.js] getSMA state: ", state)
       console.log("M: [plotSlice.js] getSMA action: ", action)
       state.sma[action.payload] = action.payload
@@ -49,28 +56,35 @@ const plotSlice = createSlice({
       // state.tokenTradingData = action.payload.tokenTradingData
     },
     storeTokenCandles: (state, action) => {
-        state.tokenCandles = action.payload && action.payload.t
+        state.tokenCandles = action.payload?.data && action.payload.data.t
             .map((e,i) => (
             {
                 date: e,
-                value: action.payload.o[i],
+                value: action.payload.data.o[i],
+                candleSize: action.payload.candleSize,
                 group:"rawValue"
             }
         ))
+
+        // state.msgLog.push("storeTokenCandles: ", state.tokenCandles?.slice(0,5))
       // console.log("M: [plotSlice.js] storeTokenCandles(", state.tokenCandles, ")")
     },
     countTradingPoints: (state, action) => {
+      state.msgLog.push("countTradingPoints")
       // console.log("M: [plotSlice.js/countTradingPoints] input", state.prepareDataInstance.getTradingDots())
-      state.tradingPoints = state.prepareDataInstance.getTradingDots()
+      state.tradingPoints = state.prepareDataInstance.getTradingDots()[0]
+      state.tradeTriggerValues = state.prepareDataInstance.getTradingDots()[1]
       state.smaOverlapAreasDiff = state.prepareDataInstance.smaOverlapAreasDiff
       console.log("M: [plotSlice.js/countTradingPoints] output ", state.tradingPoints)
     },
     countSMAData: (state, action) => {
-      const prepareData = new PrepareData(
+      state.msgLog.push("countSMAData")
+      let prepareData = this && this.prepareDataInstance || new PrepareData(
         action.payload.tokenCandles,
         action.payload.smaOneValue,
         action.payload.smaTwoValue
       )
+      console.log("M: [plotSlice.js/countSMAData] this.prepareDataInstance: ", prepareData)
       state.smaOneData = prepareData.getSMAOne()
       state.smaTwoData = prepareData.getSMATwo()
       state.prepareDataInstance = prepareData;
@@ -80,10 +94,51 @@ const plotSlice = createSlice({
     //   console.log("M: [plotSlice/countTradePoints] state: ", state)
     // },
     setSmaOneValue: (state, action) => {
+        state.msgLog.push("setSmaOneValue")
         state.smaOneValue = action.payload
     },
     setSmaTwoValue: (state, action) => {
+        state.msgLog.push("setSmaTwoValue")
         state.smaTwoValue = action.payload
+    },
+    countTradeResults: (state, action) => {
+        state.msgLog.push("countTradeResults")
+        state.tradeResults = state.prepareDataInstance.countTradeResults()
+    },
+    countMedianTradeValues: (state, action) => {
+        state.msgLog.push("countMedianTradeValues")
+
+        const sells = action.payload?.filter(e => e.action == "sell")
+
+        console.log("M: [plotSlice.js/countMedianTradeValues] sells: ", sells)
+
+        const sellsAmount = sells?.length
+        const sellsMedian = sells && sells[Math.round(sells.length/2)]
+        const buys = action.payload?.filter(e => e.action == "buy")
+        const buysAmount = buys?.length
+        const buysMedian = buys && buys[Math.round(buys.length/2)]
+        const expectedProfitFromMedian = sellsMedian && buysMedian &&
+          (sellsAmount * -sellsMedian.value) + (buysAmount * buysMedian.value)
+          || Math.random()
+
+        const sellsAverage = sells && sells.map(e => e.value)
+        // .reduce((sum,acc) => sum + acc,0).map(e => -e)/sellsAmount
+        // const buysAverage = sells && buys.reduce((sum,acc) => sum + acc,0)/buysAmount
+        // const expectedProfitFromAverage = sellsAverage && buysAverage &&
+        //   (sellsAmount * sellsAverage.value) + (buysAmount * buysAverage.value)
+        //   || Math.random()
+
+        // console.log("M: [plotSlice.js/countMedianTradeValues] prepareDataInstance ", state.prepareDataInstance)
+        // console.log("M: [plotSlice.js/countMedianTradeValues] msgLog ", state.plot)
+        state.medianTradeValues = [...state.medianTradeValues,{value:expectedProfitFromMedian,date:state.medianTradeValues.length,group:"countMedianTradeValues"}]
+        // state.averageTradeValues = [...state.averageTradeValues,{value:expectedProfitFromAverage,date:state.medianTradeValues.length,group:"averageTradeValues"}]
+
+        // state.prepareDataInstance = state.prepareDataInstance
+    },
+    setCandleValue: (state, action) => {
+        state.msgLog.push("setCandleValue: " + action.payload)
+        console.log("M: [plotSlice.js/setCandleValue] candleSize: ", action.payload)
+        state.candleSize = action.payload
     },
 
     // extraReducers:
@@ -112,5 +167,5 @@ const plotSlice = createSlice({
 // }
 
 // export const { setType, setName, setInterval, setGainInterval, setChain, setGainsThreshold, setSellThreshold, setSubInterval, savePerspectiveTokens, savePerspectiveToken, setStartBalance } = plotSlice.actions
-export const { getSMA, countTradingPoints, storeTokenCandles, countSMAData, setSmaOneValue, setSmaTwoValue, countTradePoints } = plotSlice.actions
+export const { getSMA, countTradingPoints, storeTokenCandles, countSMAData, setSmaOneValue, setSmaTwoValue, countTradePoints, countTradeResults,countMedianTradeValues, setCandleValue } = plotSlice.actions
 export default plotSlice.reducer

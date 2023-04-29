@@ -3,21 +3,36 @@ import {useEffect, useRef, useState, useContext, createContext } from "react"
 import { useSelector, useDispatch } from 'react-redux'
 import {
   setSmaOneValue,
-  setSmaTwoValue
+  setSmaTwoValue,
+  setCandleValue
 } from './plotSlice'
 import * as d3 from "d3"
 
+const resolutions = [
+  "5",
+  "10",
+  "60",
+  "240",
+  "1D"
+]
+
+const step = 5
+
 function* iterator(arr) {
-    for (let i = 0; i < arr.length - 1; i++) {
-        for (let j = i; j < arr.length; j++){
-          yield [arr[i],arr[j]]
+  console.log("M: [DelayedIterator/iterator] [arr[i],arr[j],resolutions[k]] call()")
+  for (let resolution in resolutions){
+    for (let i = 0; i < arr.length - 1; i+=step) {
+        for (let j = i; j < arr.length; j+=step){
+            console.log("M: [DelayedIterator/iterator] [arr[i],arr[j],resolutions[k]] ", [arr[i],arr[j],resolutions[resolution]])
+            // console.log("M: [DelayedIterator/iterator] resolutions ", resolutions)
+            yield [arr[i],arr[j],resolutions[resolution]]
         }
     }
+  }
 }
-const input = iterator([... new Array(60).fill(0).map((e,i) => i)])
+const input = iterator([... new Array(step*10*2).fill(0).map((e,i) => i)])
 
 const DelayedIterator = ({gen = input}) => {
-
   // const [data, setData] = useState("")
   const [play, setPlay] = useState(false)
   const smaOneValue = useSelector(state => state.plot.smaOneValue)
@@ -25,15 +40,18 @@ const DelayedIterator = ({gen = input}) => {
   const dispatch = useDispatch()
 
   function setup() {
-      // setData(gen.next().value)
-      dispatch(setSmaOneValue(gen.next().value[0]))
-      dispatch(setSmaTwoValue(gen.next().value[1]))
+      // setData("M: ")
+      const genValue = gen.next()
+      dispatch(setSmaOneValue(genValue.value[0]))
+      dispatch(setSmaTwoValue(genValue.value[1]))
+      dispatch(setCandleValue(genValue.value[2]))
   }
 
   const handleReset = () => {
     setPlay(false)
     dispatch(setSmaOneValue(0))
     dispatch(setSmaTwoValue(1))
+    dispatch(setCandleValue(0))
   }
 
   useEffect(() => {

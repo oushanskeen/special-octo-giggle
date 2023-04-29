@@ -8,9 +8,10 @@ import * as d3 from "d3"
 
 const SMASliders = () => {
 
-  const dispatch=useDispatch()
+  const dispatch = useDispatch()
   const smaOneValue = useSelector(state => state.plot.smaOneValue)
   const smaTwoValue = useSelector(state => state.plot.smaTwoValue)
+  const candleSize = useSelector(state => state.plot.candleSize)
 
   const handleSmaOneSliderChange = (event) => {
     dispatch(setSmaOneValue(event.target.value))
@@ -22,6 +23,13 @@ const SMASliders = () => {
 return (
     <>
       <h3>HEY</h3>
+        <div class="module">
+          {
+            // <label>max window: {` ${60} `} </label>
+            // <label>step: {1}</label>
+          }
+          <label>candle size: {candleSize}</label>
+        </div>
         <div class="module box smaSliders">
           <label>{smaOneValue}</label>
           <input type="range" class="slider" min="0" max="10" step="1" value={smaOneValue} onChange={handleSmaOneSliderChange}/>

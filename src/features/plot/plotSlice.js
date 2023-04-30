@@ -89,6 +89,7 @@ const plotSlice = createSlice({
       state.smaTwoData = prepareData.getSMATwo()
       state.prepareDataInstance = prepareData;
     },
+    
     // countTradePoints: (state, action) => {
     //   state.tradingPoints = state;
     //   console.log("M: [plotSlice/countTradePoints] state: ", state)

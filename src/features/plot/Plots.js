@@ -57,6 +57,7 @@ const Plots = () => {
     useEffect(() => {
         console.log("S: [Plots.js] candles received: ", data)
         dispatch(storeTokenCandles({data:data,candleSize:candleSize}))
+        // dispatch(setDataLoadState())
     },[data])
 
     useEffect(() => {
@@ -153,28 +154,28 @@ const Plots = () => {
                 }/>
             }
             {
-                // smaOverlapAreasDiff &&
-                // <SMAmulti name="smaOverlapAreasDiff" inputData={
-                //   [...smaOverlapAreasDiff]
-                // }/>
+                smaOverlapAreasDiff &&
+                <SMAmulti name="smaOverlapAreasDiff" inputData={
+                  [...smaOverlapAreasDiff]
+                }/>
             }
             {
-                // tradingPoints &&
-                // <SMAmulti name="tradingPoints" inputData={
-                //   [...tradingPoints]
-                // }/>
+                tradingPoints &&
+                <SMAmulti name="tradingPoints" inputData={
+                  [...tradingPoints]
+                }/>
             }
             {
-                // tradeTriggerValues &&
-                // <SMAmulti name="tradeTriggerValues" inputData={
-                //   [...tradeTriggerValues]
-                // }/>
+                tradeTriggerValues &&
+                <SMAmulti name="tradeTriggerValues" inputData={
+                  [...tradeTriggerValues]
+                }/>
             }
             {
-                // tradeResults &&
-                // <SMAmulti name="tradeResults" inputData={
-                //   [...tradeResults]
-                // }/>
+                tradeResults &&
+                <SMAmulti name="tradeResults" inputData={
+                  [...tradeResults]
+                }/>
             }
             {
                 medianTradeValues &&

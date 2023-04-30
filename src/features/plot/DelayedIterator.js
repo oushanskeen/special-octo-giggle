@@ -37,6 +37,7 @@ const DelayedIterator = ({gen = input}) => {
   const [play, setPlay] = useState(false)
   const smaOneValue = useSelector(state => state.plot.smaOneValue)
   const smaTwoValue = useSelector(state => state.plot.smaTwoValue)
+  const isDataReady = useSelector(state => state.plot.isDataReady)
   const dispatch = useDispatch()
 
   function setup() {
@@ -56,6 +57,7 @@ const DelayedIterator = ({gen = input}) => {
 
   useEffect(() => {
       let timer
+      // isDataReady &&
       play && (() => {
           timer = setTimeout(() => setup(), 100)
       })()

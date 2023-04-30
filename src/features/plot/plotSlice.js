@@ -10,7 +10,7 @@ const initialState = {
   tradingPoints: [],
   smaOneData: [],
   smaTwoData: [],
-  // tradePoints: [],
+  isDataReady: false,
   smaOneValue: 2,
   smaTwoValue: 4,
   prepareDataInstance: {},

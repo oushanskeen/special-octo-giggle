@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/special-octo-giggle/static/css/main.de0b93ab.css",
-    "main.js": "/special-octo-giggle/static/js/main.c9266a4f.js",
+    "main.css": "/special-octo-giggle/static/css/main.35c1436b.css",
+    "main.js": "/special-octo-giggle/static/js/main.b6fc7fa1.js",
     "index.html": "/special-octo-giggle/index.html",
-    "main.de0b93ab.css.map": "/special-octo-giggle/static/css/main.de0b93ab.css.map",
-    "main.c9266a4f.js.map": "/special-octo-giggle/static/js/main.c9266a4f.js.map"
+    "main.35c1436b.css.map": "/special-octo-giggle/static/css/main.35c1436b.css.map",
+    "main.b6fc7fa1.js.map": "/special-octo-giggle/static/js/main.b6fc7fa1.js.map"
   },
   "entrypoints": [
-    "static/css/main.de0b93ab.css",
-    "static/js/main.c9266a4f.js"
+    "static/css/main.35c1436b.css",
+    "static/js/main.b6fc7fa1.js"
   ]
 }

@@ -5,7 +5,7 @@
 // WHEN related message is registered
 // THEN wrapper shows all module related messages and data
 
-// WHEN message from subscriptions
+// WHEN message from subscriptions received
 // THEN listener signal is visible
 // THEN received data is shown in a log
 
